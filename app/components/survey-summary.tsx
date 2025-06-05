@@ -11,8 +11,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { SurveyData } from "@/app/page";
-import { Download, RotateCcw } from "lucide-react";
-
+import {
+  Download,
+  RotateCcw,
+  CheckCircle,
+  AlertCircle,
+  Save,
+} from "lucide-react";
 
 interface SurveySummaryProps {
   surveyData: SurveyData;
@@ -24,6 +29,11 @@ export default function SurveySummary({
   onReset,
 }: SurveySummaryProps) {
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">(
+    "idle"
+  );
+  const [saveMessage, setSaveMessage] = useState("");
 
   const selectedReports = surveyData.reports.filter(
     (report) => report.selected
@@ -36,52 +46,74 @@ export default function SurveySummary({
       team: surveyData.team,
       reportName: report.name,
       pageName: page.name,
+      fulfillsPurpose: page.fulfillsPurpose || "",
       purpose: page.purpose || "",
     }));
   });
 
-  console.log("=== DATOS EN SURVEY SUMMARY ===");
-  console.log("surveyData completo:", surveyData);
-  console.log("selectedReports:", selectedReports);
-  console.log("flattenedData:", flattenedData);
-  console.log("=== FIN SURVEY SUMMARY ===");
+  const saveToDatabase = async () => {
+    setIsSaving(true);
+    setSaveStatus("idle");
 
-  const saveToLocalStorage = () => {
-    // Guardar exactamente los mismos datos que se muestran en la tabla
-    const surveyResult = {
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
-      name: surveyData.name,
-      team: surveyData.team,
-      // Guardar los datos aplanados directamente para evitar problemas de estructura
-      flattenedData: flattenedData,
-      // También guardar la estructura original por compatibilidad
-      reports: selectedReports,
-    };
+    try {
+      const responses = flattenedData.map((item) => ({
+        report_name: item.reportName,
+        page_name: item.pageName,
+        fulfills_purpose: item.fulfillsPurpose as "si" | "no",
+        purpose: item.purpose,
+      }));
 
-    console.log("=== GUARDANDO EN LOCALSTORAGE ===");
-    console.log("Datos a guardar:", surveyResult);
+      const response = await fetch("/api/surveys", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: surveyData.name,
+          team: surveyData.team,
+          responses,
+        }),
+      });
 
-    const existingResults = JSON.parse(
-      localStorage.getItem("surveyResults") || "[]"
-    );
-    existingResults.push(surveyResult);
-    localStorage.setItem("surveyResults", JSON.stringify(existingResults));
+      const result = await response.json();
 
-    console.log("Datos guardados exitosamente");
-    console.log("=== FIN GUARDADO ===");
+      if (response.ok && result.success) {
+        setSaveStatus("success");
+        setSaveMessage("Encuesta guardada exitosamente, puedes cerrar esta ventana.");
+        console.log("Survey saved with ID:", result.survey_id);
+      } else {
+        setSaveStatus("error");
+        setSaveMessage(result.error || "Error al guardar la encuesta");
+        console.error("Save error:", result.error);
+      }
+    } catch (error) {
+      setSaveStatus("error");
+      setSaveMessage("Error de conexión al guardar la encuesta");
+      console.error("Network error:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  // Llamar a saveToLocalStorage cuando se monta el componente
-  useState(() => {
-    saveToLocalStorage();
-  });
+  //   // Guardar automáticamente cuando se monta el componente
+  // useEffect(() => {
+  //   if (flattenedData.length > 0) {
+  //     saveToDatabase()
+  //   }
+  // }, []) // Solo se ejecuta una vez
 
   const downloadCSV = () => {
     setIsDownloading(true);
 
     try {
-      const headers = ["Nombre", "Equipo", "Informe", "Página", "Propósito"];
+      const headers = [
+        "Nombre",
+        "Equipo",
+        "Informe",
+        "Página",
+        "¿Cumple su propósito?",
+        "Propósito alternativo",
+      ];
       const csvContent = [
         headers.join(","),
         ...flattenedData.map((row) =>
@@ -90,6 +122,13 @@ export default function SurveySummary({
             `"${row.team}"`,
             `"${row.reportName}"`,
             `"${row.pageName}"`,
+            `"${
+              row.fulfillsPurpose === "si"
+                ? "Sí"
+                : row.fulfillsPurpose === "no"
+                ? "No"
+                : ""
+            }"`,
             `"${row.purpose}"`,
           ].join(",")
         ),
@@ -128,11 +167,45 @@ export default function SurveySummary({
           ¡Encuesta Completada!
         </h2>
         <p className="text-muted-foreground">
-          Gracias por completar la encuesta. Los datos han sido guardados
-          correctamente. 
-          Puedes descargar los resultados y cerrar esta ventanta. 
+          Gracias por completar la encuesta. Recuerda{" "}
+          <b className="text-orange-600">Guardar y enviar</b>.
         </p>
       </div>
+      {/* Estado de guardado */}
+      {(isSaving || saveStatus !== "idle") && (
+        <div
+          className={`p-4 border rounded-lg ${
+            saveStatus === "success"
+              ? "bg-green-50 border-green-200"
+              : saveStatus === "error"
+              ? "bg-red-50 border-red-200"
+              : "bg-blue-50 border-blue-200"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {isSaving && (
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+            )}
+            {saveStatus === "success" && (
+              <CheckCircle className="h-4 w-4 text-green-600" />
+            )}
+            {saveStatus === "error" && (
+              <AlertCircle className="h-4 w-4 text-red-600" />
+            )}
+            <span
+              className={`text-sm font-medium ${
+                saveStatus === "success"
+                  ? "text-green-800"
+                  : saveStatus === "error"
+                  ? "text-red-800"
+                  : "text-blue-800"
+              }`}
+            >
+              {isSaving ? "Guardando encuesta..." : saveMessage}
+            </span>
+          </div>
+        </div>
+      )}
 
       <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
         <h3 className="font-semibold text-green-800 mb-2">
@@ -162,7 +235,8 @@ export default function SurveySummary({
             <TableRow>
               <TableHead>Informe</TableHead>
               <TableHead>Página</TableHead>
-              <TableHead>Propósito</TableHead>
+              <TableHead>¿Cumple su propósito?</TableHead>
+              <TableHead>Propósito alternativo</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -173,12 +247,29 @@ export default function SurveySummary({
                     {item.reportName}
                   </TableCell>
                   <TableCell>{item.pageName}</TableCell>
+                  <TableCell>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs ${
+                        item.fulfillsPurpose === "si"
+                          ? "bg-green-100 text-green-800"
+                          : item.fulfillsPurpose === "no"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      {item.fulfillsPurpose === "si"
+                        ? "Sí"
+                        : item.fulfillsPurpose === "no"
+                        ? "No"
+                        : "N/A"}
+                    </span>
+                  </TableCell>
                   <TableCell>{item.purpose}</TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={3} className="text-center py-4">
+                <TableCell colSpan={4} className="text-center py-4">
                   No hay datos seleccionados
                 </TableCell>
               </TableRow>
@@ -205,7 +296,20 @@ export default function SurveySummary({
           <RotateCcw size={16} />
           Nueva Encuesta
         </Button>
+
+        <Button
+          onClick={saveToDatabase}
+          className="flex items-center gap-2"
+          disabled={isDownloading || flattenedData.length === 0}
+        >
+          <Save size={16} />
+          Guardar y Enviar
+        </Button>
       </div>
+      <hr />
+      <p className="text-muted-foreground">
+        Si deseas, puedes descargar los resultados en formato CSV.
+      </p>
     </div>
   );
 }

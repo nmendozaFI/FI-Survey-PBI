@@ -46,7 +46,7 @@ export default function ReportSelection({ reports, onSubmit }: ReportSelectionPr
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">¿Qué informes utilizas?</h2>
-        <p className="text-sm text-muted-foreground">Selecciona todos los que apliquen</p>
+        <p className="text-sm text-muted-foreground">Selecciona todos los que apliquen.</p>
 
         {error && <p className="text-sm text-red-500">{error}</p>}
 
@@ -67,6 +67,7 @@ export default function ReportSelection({ reports, onSubmit }: ReportSelectionPr
       </div>
 
       <div className="space-y-2">
+        <p className="text-sm text-muted-foreground">Nota: De todos los informes que selecciones, en la siguiente sección deberas indicar que pagina utilizas.</p>
         <h3 className="text-lg font-medium">Informes seleccionados:</h3>
         {selectedReports.length > 0 ? (
           <ul className="list-disc list-inside">

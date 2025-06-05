@@ -1,254 +1,249 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Download, Eye, Trash2, FileSpreadsheet, FileDown, Bug } from "lucide-react"
-import Link from "next/link"
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import {
+  Download,
+  Eye,
+  Trash2,
+  FileSpreadsheet,
+  FileDown,
+  Bug,
+  RefreshCw,
+} from "lucide-react";
+import Link from "next/link";
 
-type FlattenedData = {
-  name: string
-  team: string
-  reportName: string
-  pageName: string
-  purpose: string
-}
-
-type ReportPage = {
-  id: string
-  name: string
-  purpose?: string
-  selected?: boolean
-}
-
-type Report = {
-  id: string
-  name: string
-  pages: ReportPage[]
-  selected?: boolean
-}
+type SurveyResponse = {
+  id?: number;
+  survey_id: string;
+  report_name: string;
+  page_name: string;
+  fulfills_purpose: "si" | "no";
+  purpose: string;
+};
 
 type SurveyResult = {
-  id: string
-  timestamp: string
-  name: string
-  team: string
-  flattenedData: FlattenedData[]
-  reports?: Report[] // Mantener por compatibilidad
-}
+  id?: number;
+  survey_id: string;
+  name: string;
+  team: string;
+  timestamp: string;
+  responses: SurveyResponse[];
+};
 
 export default function AnswersPage() {
-  const [surveyResults, setSurveyResults] = useState<SurveyResult[]>([])
-  const [selectedSurvey, setSelectedSurvey] = useState<SurveyResult | null>(null)
-  const [isDownloadingAll, setIsDownloadingAll] = useState(false)
-  const [debugMode, setDebugMode] = useState(false)
+  const [surveyResults, setSurveyResults] = useState<SurveyResult[]>([]);
+  const [selectedSurvey, setSelectedSurvey] = useState<SurveyResult | null>(
+    null
+  );
+  const [isDownloadingAll, setIsDownloadingAll] = useState(false);
+  const [debugMode, setDebugMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const results = JSON.parse(localStorage.getItem("surveyResults") || "[]")
-    console.log("=== DATOS CARGADOS DESDE LOCALSTORAGE (ANSWERS) ===")
-    console.log("Número de encuestas:", results.length)
-
-    // Mostrar todos los datos antes de limpiar
-    results.forEach((survey: SurveyResult, index: number) => {
-      console.log(`\n--- Encuesta ORIGINAL ${index + 1}: ${survey.name} ---`)
-      console.log("flattenedData:", survey.flattenedData)
-      console.log("Número de páginas en flattenedData:", survey.flattenedData?.length || 0)
-      console.log("timestamp:", survey.timestamp)
-    })
-
-    // Limpiar duplicados manteniendo la encuesta con MÁS datos
-    const cleanedResults: SurveyResult[] = []
-
-    results.forEach((survey: SurveyResult) => {
-      const existingIndex = cleanedResults.findIndex(
-        (existing) =>
-          existing.name === survey.name &&
-          existing.team === survey.team &&
-          Math.abs(new Date(existing.timestamp).getTime() - new Date(survey.timestamp).getTime()) < 30000, // 30 segundos
-      )
-
-      if (existingIndex === -1) {
-        // No existe duplicado, agregar
-        cleanedResults.push(survey)
-        console.log(`Agregando nueva encuesta: ${survey.name} con ${survey.flattenedData?.length || 0} páginas`)
-      } else {
-        // Existe duplicado, mantener el que tenga más datos
-        const existing = cleanedResults[existingIndex]
-        const existingPages = existing.flattenedData?.length || 0
-        const currentPages = survey.flattenedData?.length || 0
-
-        console.log(`Duplicado encontrado para ${survey.name}:`)
-        console.log(`  - Existente: ${existingPages} páginas (${existing.timestamp})`)
-        console.log(`  - Actual: ${currentPages} páginas (${survey.timestamp})`)
-
-        if (currentPages > existingPages) {
-          console.log(`  -> Reemplazando con la encuesta que tiene más datos`)
-          cleanedResults[existingIndex] = survey
-        } else {
-          console.log(`  -> Manteniendo la encuesta existente`)
-        }
-      }
-    })
-
-    // Si se encontraron duplicados, actualizar localStorage
-    if (cleanedResults.length !== results.length) {
-      console.log(`Se procesaron ${results.length - cleanedResults.length} duplicados`)
-      localStorage.setItem("surveyResults", JSON.stringify(cleanedResults))
-    }
-
-    console.log("\n=== DATOS FINALES DESPUÉS DE LIMPIAR ===")
-    cleanedResults.forEach((survey: SurveyResult, index: number) => {
-      console.log(`\n--- Encuesta FINAL ${index + 1}: ${survey.name} ---`)
-      console.log("flattenedData:", survey.flattenedData)
-      console.log("Número de páginas en flattenedData:", survey.flattenedData?.length || 0)
-    })
-    console.log("=== FIN DEBUG INICIAL (ANSWERS) ===\n")
-
-    setSurveyResults(cleanedResults)
-  }, [])
-
-  const downloadExcel = async (survey: SurveyResult) => {
-    console.log("\n=== DESCARGA INDIVIDUAL (USANDO FLATTENED DATA) ===")
-    console.log("Encuesta a descargar:", survey.name)
-    console.log("flattenedData:", survey.flattenedData)
-
-    if (!survey.flattenedData || survey.flattenedData.length === 0) {
-      console.error("¡ERROR! No hay flattenedData para descargar")
-      alert("No hay datos para descargar. La encuesta no tiene datos válidos.")
-      return
-    }
-
-    // Usar directamente los datos aplanados guardados
-    const dataForExcel = survey.flattenedData.map((item) => ({
-      Nombre: item.name,
-      Equipo: item.team,
-      Fecha: new Date(survey.timestamp).toLocaleDateString("es-ES"),
-      Informe: item.reportName,
-      Página: item.pageName,
-      Propósito: item.purpose,
-    }))
-
-    console.log("Datos para Excel:", dataForExcel)
-    console.log("Total filas:", dataForExcel.length)
-
-    // Convert to CSV format (Excel compatible)
-    const headers = ["Nombre", "Equipo", "Fecha", "Informe", "Página", "Propósito"]
-    const csvContent = [
-      headers.join(","),
-      ...dataForExcel.map((row) => headers.map((header) => `"${row[header as keyof typeof row] || ""}"`).join(",")),
-    ].join("\n")
-
-    // Add BOM for proper Excel encoding
-    const BOM = "\uFEFF"
-    const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-
-    link.setAttribute("href", url)
-    link.setAttribute("download", `encuesta-${survey.name.replace(/\s+/g, "-")}-${survey.id}.csv`)
-    link.style.visibility = "hidden"
-
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
-  const downloadAllExcel = async () => {
-    setIsDownloadingAll(true)
-    console.log("\n=== DESCARGA TODAS LAS ENCUESTAS (USANDO FLATTENED DATA) ===")
+  const fetchSurveys = async () => {
+    setIsLoading(true);
+    setError(null);
 
     try {
-      // Usar directamente los datos aplanados de todas las encuestas
-      const allData = surveyResults.flatMap((survey) => {
-        console.log(`Procesando encuesta: ${survey.name}`)
-        console.log("flattenedData:", survey.flattenedData)
+      const response = await fetch("/api/surveys");
+      const data = await response.json();
 
-        if (!survey.flattenedData) {
-          console.warn(`Encuesta ${survey.name} no tiene flattenedData`)
-          return []
-        }
-
-        return survey.flattenedData.map((item) => ({
-          Nombre: item.name,
-          Equipo: item.team,
-          Fecha: new Date(survey.timestamp).toLocaleDateString("es-ES"),
-          Informe: item.reportName,
-          Página: item.pageName,
-          Propósito: item.purpose,
-        }))
-      })
-
-      console.log("Todos los datos recopilados:", allData)
-      console.log("Total filas para todas las encuestas:", allData.length)
-
-      if (allData.length === 0) {
-        console.error("¡ERROR! No hay datos para descargar")
-        alert("No hay datos para descargar. Revisa la consola para más detalles.")
-        return
+      if (response.ok) {
+        setSurveyResults(data.surveys || []);
+        console.log("Surveys loaded:", data.surveys?.length || 0);
+      } else {
+        setError(data.error || "Error al cargar las encuestas");
       }
+    } catch (err) {
+      setError("Error de conexión al cargar las encuestas");
+      console.error("Fetch error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-      // Convert to CSV format (Excel compatible)
-      const headers = ["Nombre", "Equipo", "Fecha", "Informe", "Página", "Propósito"]
+  useEffect(() => {
+    fetchSurveys();
+  }, []);
+
+  const downloadExcel = async (survey: SurveyResult) => {
+    if (!survey.responses || survey.responses.length === 0) {
+      alert("No hay datos para descargar en esta encuesta.");
+      return;
+    }
+
+    try {
+      const dataForExcel = survey.responses.map((response) => ({
+        Nombre: survey.name,
+        Equipo: survey.team,
+        Fecha: new Date(survey.timestamp).toLocaleDateString("es-ES"),
+        Informe: response.report_name,
+        Página: response.page_name,
+        "¿Cumple su propósito?":
+          response.fulfills_purpose === "si" ? "Sí" : "No",
+        "Propósito alternativo": response.purpose,
+      }));
+
+      const headers = [
+        "Nombre",
+        "Equipo",
+        "Fecha",
+        "Informe",
+        "Página",
+        "¿Cumple su propósito?",
+        "Propósito alternativo",
+      ];
       const csvContent = [
         headers.join(","),
-        ...allData.map((row) => headers.map((header) => `"${row[header as keyof typeof row] || ""}"`).join(",")),
-      ].join("\n")
+        ...dataForExcel.map((row) =>
+          headers
+            .map((header) => `"${row[header as keyof typeof row] || ""}"`)
+            .join(",")
+        ),
+      ].join("\n");
 
-      // Add BOM for proper Excel encoding
-      const BOM = "\uFEFF"
-      const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" })
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement("a")
+      const BOM = "\uFEFF";
+      const blob = new Blob([BOM + csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
 
-      const today = new Date().toISOString().split("T")[0]
-      link.setAttribute("href", url)
-      link.setAttribute("download", `todas-las-encuestas-${today}.csv`)
-      link.style.visibility = "hidden"
+      link.setAttribute("href", url);
+      link.setAttribute(
+        "download",
+        `encuesta-${survey.name.replace(/\s+/g, "-")}-${survey.survey_id}.csv`
+      );
+      link.style.visibility = "hidden";
 
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch (error) {
-      console.error("Error al descargar todas las encuestas:", error)
+      console.error("Error al descargar:", error);
+      alert("Error al generar la descarga");
+    }
+  };
+
+  const downloadAllExcel = async () => {
+    setIsDownloadingAll(true);
+
+    try {
+      const response = await fetch("/api/surveys/export");
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.setAttribute("href", url);
+        link.setAttribute(
+          "download",
+          `todas-las-encuestas-${new Date().toISOString().split("T")[0]}.csv`
+        );
+        link.style.visibility = "hidden";
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        alert("Error al descargar todas las encuestas");
+      }
+    } catch (error) {
+      console.error("Error al descargar todas las encuestas:", error);
+      alert("Error de conexión al descargar");
     } finally {
-      setIsDownloadingAll(false)
+      setIsDownloadingAll(false);
     }
-  }
+  };
 
-  const deleteSurvey = (surveyId: string) => {
-    const updatedResults = surveyResults.filter((survey) => survey.id !== surveyId)
-    setSurveyResults(updatedResults)
-    localStorage.setItem("surveyResults", JSON.stringify(updatedResults))
-    if (selectedSurvey?.id === surveyId) {
-      setSelectedSurvey(null)
+  const deleteSurvey = async (survey_id: string) => {
+    if (!confirm("¿Estás seguro de que quieres eliminar esta encuesta?")) {
+      return;
     }
-  }
 
-  const clearAllSurveys = () => {
-    if (confirm("¿Estás seguro de que quieres eliminar todas las encuestas? Esta acción no se puede deshacer.")) {
-      setSurveyResults([])
-      localStorage.removeItem("surveyResults")
-      setSelectedSurvey(null)
+    try {
+      const response = await fetch(`/api/surveys/${survey_id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setSurveyResults((prev) =>
+          prev.filter((survey) => survey.survey_id !== survey_id)
+        );
+        if (selectedSurvey?.survey_id === survey_id) {
+          setSelectedSurvey(null);
+        }
+      } else {
+        const data = await response.json();
+        alert(data.error || "Error al eliminar la encuesta");
+      }
+    } catch (error) {
+      console.error("Error al eliminar:", error);
+      alert("Error de conexión al eliminar");
     }
-  }
+  };
 
   const getTotalPages = (survey: SurveyResult) => {
-    return survey.flattenedData?.length || 0
-  }
+    return survey.responses?.length || 0;
+  };
 
   const getTotalReports = (survey: SurveyResult) => {
-    if (!survey.flattenedData) return 0
-    // Contar informes únicos en flattenedData
-    const uniqueReports = new Set(survey.flattenedData.map((item) => item.reportName))
-    return uniqueReports.size
-  }
+    if (!survey.responses) return 0;
+    const uniqueReports = new Set(
+      survey.responses.map((response) => response.report_name)
+    );
+    return uniqueReports.size;
+  };
 
   const getTotalResponses = () => {
     return surveyResults.reduce((total, survey) => {
-      return total + (survey.flattenedData?.length || 0)
-    }, 0)
+      return total + (survey.responses?.length || 0);
+    }, 0);
+  };
+
+  if (isLoading) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-4">
+        <div className="flex items-center gap-2">
+          <RefreshCw className="h-6 w-6 animate-spin" />
+          <span>Cargando encuestas...</span>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6 text-center">
+            <p className="text-red-600 mb-4">{error}</p>
+            <Button onClick={fetchSurveys}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Reintentar
+            </Button>
+          </CardContent>
+        </Card>
+      </main>
+    );
   }
 
   return (
@@ -266,20 +261,21 @@ export default function AnswersPage() {
               <Bug size={16} />
               Debug {debugMode ? "ON" : "OFF"}
             </Button>
-            <Button variant="destructive" size="sm" onClick={clearAllSurveys} className="flex items-center gap-2">
-              <Trash2 size={16} />
-              Limpiar Todo
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchSurveys}
+              className="flex items-center gap-2"
+            >
+            <RefreshCw size={16} />
+              Actualizar
             </Button>
-            {/* {surveyResults.length > 0 && (
-              <Button
-                onClick={downloadAllExcel}
-                disabled={isDownloadingAll || surveyResults.length === 0}
-                className="flex items-center gap-2"
-              >
+             {surveyResults.length > 0 && (
+              <Button onClick={downloadAllExcel} disabled={isDownloadingAll} className="flex items-center gap-2">
                 <FileDown size={18} />
-                Descargar Todas ({getTotalResponses()} respuestas)
+                Descargar Todas ({surveyResults.length}) respuestas
               </Button>
-            )} */}
+            )}
             <Link href="/">
               <Button variant="outline">Volver a Encuesta</Button>
             </Link>
@@ -300,30 +296,14 @@ export default function AnswersPage() {
                   <strong>Total respuestas:</strong> {getTotalResponses()}
                 </div>
                 {surveyResults.map((survey, index) => (
-                  <div key={survey.id} className="border-l-2 border-yellow-300 pl-4">
+                  <div key={survey.survey_id} className="border-l-2 border-yellow-300 pl-4">
                     <div>
                       <strong>Encuesta {index + 1}:</strong> {survey.name} ({survey.team})
                     </div>
-                    <div>ID: {survey.id}</div>
+                    <div>ID: {survey.survey_id}</div>
                     <div>Timestamp: {survey.timestamp}</div>
-                    <div>Páginas en flattenedData: {survey.flattenedData?.length || 0}</div>
+                    <div>Respuestas: {survey.responses?.length || 0}</div>
                     <div>Informes únicos: {getTotalReports(survey)}</div>
-                    <div>
-                      <strong>flattenedData existe:</strong> {survey.flattenedData ? "SÍ" : "NO"}
-                    </div>
-                    {survey.flattenedData && survey.flattenedData.length > 0 && (
-                      <div className="mt-2">
-                        <strong>Detalle de páginas:</strong>
-                        {survey.flattenedData.slice(0, 3).map((item, pIndex) => (
-                          <div key={pIndex} className="ml-4 text-xs">
-                            {pIndex + 1}. {item.reportName} - {item.pageName}
-                          </div>
-                        ))}
-                        {survey.flattenedData.length > 3 && (
-                          <div className="ml-4 text-xs">... y {survey.flattenedData.length - 3} más</div>
-                        )}
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
@@ -353,9 +333,11 @@ export default function AnswersPage() {
                 <div className="space-y-3">
                   {surveyResults.map((survey) => (
                     <div
-                      key={survey.id}
+                      key={survey.survey_id}
                       className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                        selectedSurvey?.id === survey.id ? "border-primary bg-primary/5" : "hover:bg-muted/50"
+                        selectedSurvey?.survey_id === survey.survey_id
+                          ? "border-primary bg-primary/5"
+                          : "hover:bg-muted/50"
                       }`}
                       onClick={() => setSelectedSurvey(survey)}
                     >
@@ -392,7 +374,7 @@ export default function AnswersPage() {
                             downloadExcel(survey)
                           }}
                           className="flex items-center gap-1"
-                          disabled={!survey.flattenedData || survey.flattenedData.length === 0}
+                          disabled={!survey.responses || survey.responses.length === 0}
                         >
                           <Download size={14} />
                           Excel
@@ -402,7 +384,7 @@ export default function AnswersPage() {
                           variant="destructive"
                           onClick={(e) => {
                             e.stopPropagation()
-                            deleteSurvey(survey.id)
+                            deleteSurvey(survey.survey_id)
                           }}
                           className="flex items-center gap-1"
                         >
@@ -457,22 +439,34 @@ export default function AnswersPage() {
                         <TableRow>
                           <TableHead>Informe</TableHead>
                           <TableHead>Página</TableHead>
-                          <TableHead>Propósito</TableHead>
+                          <TableHead>¿Cumple su propósito?</TableHead>
+                          <TableHead>Propósito alternativo</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {selectedSurvey.flattenedData && selectedSurvey.flattenedData.length > 0 ? (
-                          selectedSurvey.flattenedData.map((item, index) => (
+                        {selectedSurvey.responses && selectedSurvey.responses.length > 0 ? (
+                          selectedSurvey.responses.map((response, index) => (
                             <TableRow key={index}>
-                              <TableCell className="font-medium">{item.reportName}</TableCell>
-                              <TableCell>{item.pageName}</TableCell>
-                              <TableCell>{item.purpose}</TableCell>
+                              <TableCell className="font-medium">{response.report_name}</TableCell>
+                              <TableCell>{response.page_name}</TableCell>
+                              <TableCell>
+                                <span
+                                  className={`px-2 py-1 rounded-full text-xs ${
+                                    response.fulfills_purpose === "si"
+                                      ? "bg-green-100 text-green-800"
+                                      : "bg-red-100 text-red-800"
+                                  }`}
+                                >
+                                  {response.fulfills_purpose === "si" ? "Sí" : "No"}
+                                </span>
+                              </TableCell>
+                              <TableCell>{response.purpose}</TableCell>
                             </TableRow>
                           ))
                         ) : (
                           <TableRow>
-                            <TableCell colSpan={3} className="text-center py-4">
-                              No hay páginas seleccionadas en esta encuesta
+                            <TableCell colSpan={4} className="text-center py-4">
+                              No hay respuestas en esta encuesta
                             </TableCell>
                           </TableRow>
                         )}
@@ -483,7 +477,7 @@ export default function AnswersPage() {
                   <Button
                     onClick={() => downloadExcel(selectedSurvey)}
                     className="w-full"
-                    disabled={!selectedSurvey.flattenedData || selectedSurvey.flattenedData.length === 0}
+                    disabled={!selectedSurvey.responses || selectedSurvey.responses.length === 0}
                   >
                     <Download size={16} className="mr-2" />
                     Descargar en Excel
@@ -499,5 +493,5 @@ export default function AnswersPage() {
         </div>
       </div>
     </main>
-  )
+  );
 }

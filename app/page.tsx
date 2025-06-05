@@ -18,6 +18,7 @@ export type Report = {
     name: string
     purpose?: string
     selected?: boolean
+    fulfillsPurpose?: string
   }[]
   selected?: boolean
 }
@@ -60,7 +61,7 @@ export default function Home() {
 
   const handlePageSelection = (
     reportId: string,
-    pages: { id: string; name: string; purpose?: string; selected?: boolean }[],
+    pages: { id: string; name: string; purpose?: string; selected?: boolean, fulfillsPurpose?: string }[],
   ) => {
     setSurveyData((prev) => ({
       ...prev,

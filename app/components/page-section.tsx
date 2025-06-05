@@ -1,24 +1,40 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import type { Report } from "@/app/page"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { Report } from "@/app/page";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PageSelectionProps {
-  report: Report
-  reportIndex: number
-  totalReports: number
-  onSubmit: (reportId: string, pages: { id: string; name: string; purpose?: string; selected?: boolean }[]) => void
-  onBack?: () => void
-  onNext?: () => void
-  onFinish?: () => void
-  canGoBack?: boolean
-  canGoNext?: boolean
-  isLastReport?: boolean
+  report: Report;
+  reportIndex: number;
+  totalReports: number;
+  onSubmit: (
+    reportId: string,
+    pages: {
+      id: string;
+      name: string;
+      purpose?: string;
+      selected?: boolean;
+      fulfillsPurpose?: string;
+    }[]
+  ) => void;
+  onBack?: () => void;
+  onNext?: () => void;
+  onFinish?: () => void;
+  canGoBack?: boolean;
+  canGoNext?: boolean;
+  isLastReport?: boolean;
 }
 
 export default function PageSelection({
@@ -38,9 +54,10 @@ export default function PageSelection({
       ...page,
       selected: page.selected || false,
       purpose: page.purpose || "",
-    })),
-  )
-  const [error, setError] = useState("")
+      fulfillsPurpose: page.fulfillsPurpose ? page.fulfillsPurpose : "si"
+    }))
+  );
+  const [error, setError] = useState("");
 
   // Update pages when report changes
   useEffect(() => {
@@ -49,65 +66,87 @@ export default function PageSelection({
         ...page,
         selected: page.selected || false,
         purpose: page.purpose || "",
-      })),
-    )
-    setError("")
-  }, [report])
+        fulfillsPurpose: page.fulfillsPurpose ? page.fulfillsPurpose : "si"
+      }))
+    );
+    setError("");
+  }, [report]);
 
   const handleTogglePage = (pageId: string) => {
-    setPages((prev) => prev.map((page) => (page.id === pageId ? { ...page, selected: !page.selected } : page)))
-    setError("")
-  }
+    setPages((prev) =>
+      prev.map((page) =>
+        page.id === pageId ? { ...page, selected: !page.selected } : page
+      )
+    );
+    setError("");
+  };
 
   const handlePurposeChange = (pageId: string, purpose: string) => {
-    setPages((prev) => prev.map((page) => (page.id === pageId ? { ...page, purpose } : page)))
+    setPages((prev) =>
+      prev.map((page) => (page.id === pageId ? { ...page, purpose } : page))
+    );
+  };
+
+  const handleFulfillsPurposeChange = (pageId: string, fulfillsPurpose: string) => {
+    setPages((prev) => prev.map((page) => (page.id === pageId ? { ...page, fulfillsPurpose } : page)))
   }
 
   const validateAndSave = () => {
-    const selectedPages = pages.filter((page) => page.selected)
+    const selectedPages = pages.filter((page) => page.selected);
 
     if (selectedPages.length === 0) {
-      setError("Por favor seleccione al menos una página")
+      setError("Por favor seleccione al menos una página");
+      return false;
+    }
+
+    const hasEmptyFulfillsPurpose = selectedPages.some((page) => !page.fulfillsPurpose?.trim())
+
+    if (hasEmptyFulfillsPurpose) {
+      setError("Por favor responda si cada página seleccionada cumple su propósito")
       return false
     }
 
-    const hasEmptyPurpose = selectedPages.some((page) => !page.purpose?.trim())
+    const hasEmptyPurpose = selectedPages.some((page) => page.fulfillsPurpose === "no" && !page.purpose?.trim())
+
 
     if (hasEmptyPurpose) {
-      setError("Por favor complete el propósito para todas las páginas seleccionadas")
+      setError("Por favor complete el propósito para todas las páginas que no cumplen su función")
       return false
     }
 
     // Save current report data
-    onSubmit(report.id, pages)
-    return true
-  }
+    onSubmit(report.id, pages);
+    return true;
+  };
 
   const handleBack = () => {
     // Save current state before going back
-    onSubmit(report.id, pages)
-    if (onBack) onBack()
-  }
+    onSubmit(report.id, pages);
+    if (onBack) onBack();
+  };
 
   const handleNext = () => {
     if (validateAndSave() && onNext) {
-      onNext()
+      onNext();
     }
-  }
+  };
 
   const handleFinish = () => {
     if (validateAndSave() && onFinish) {
-      onFinish()
+      onFinish();
     }
-  }
+  };
 
-  const selectedPagesCount = pages.filter((page) => page.selected).length
+  const selectedPagesCount = pages.filter((page) => page.selected).length;
 
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">
-          Informe {reportIndex} de {totalReports}: {report.name}
+          {report.name}
+        </h2>
+        <h2 className="text-xl font-semibold">
+          Estamos en el Informe {reportIndex} de los {totalReports} que seleccionaste.
         </h2>
         <p className="text-sm text-muted-foreground">Selecciona las páginas que utilizas de este informe</p>
         {selectedPagesCount > 0 && (
@@ -121,7 +160,7 @@ export default function PageSelection({
 
         <div className="space-y-6 mt-4 max-h-96 overflow-y-auto">
           {pages.map((page) => (
-            <div key={page.id} className="space-y-2 p-3 border rounded-lg">
+            <div key={page.id} className="space-y-3 p-4 border rounded-lg">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id={`${report.id}-${page.id}`}
@@ -134,17 +173,39 @@ export default function PageSelection({
               </div>
 
               {page.selected && (
-                <div className="ml-6 mt-2">
-                  <Label htmlFor={`${report.id}-${page.id}-purpose`} className="text-sm">
-                    ¿Para qué utilizas esta página?
-                  </Label>
-                  <Input
-                    id={`${report.id}-${page.id}-purpose`}
-                    placeholder="Describe el propósito o uso que le das a esta página"
-                    value={page.purpose}
-                    onChange={(e) => handlePurposeChange(page.id, e.target.value)}
-                    className="mt-1"
-                  />
+                <div className="ml-6 space-y-3">
+                  <div>
+                    <Label htmlFor={`${report.id}-${page.id}-fulfills`} className="text-sm font-medium">
+                      ¿Cumple su propósito?
+                    </Label>
+                    <Select
+                      value={page.fulfillsPurpose}
+                      onValueChange={(value) => handleFulfillsPurposeChange(page.id, value)}
+                    >
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Selecciona una opción" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="si">Sí</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {page.fulfillsPurpose === "no" && (
+                    <div>
+                      <Label htmlFor={`${report.id}-${page.id}-purpose`} className="text-sm font-medium">
+                        ¿Para qué utilizas esta página?
+                      </Label>
+                      <Input
+                        id={`${report.id}-${page.id}-purpose`}
+                        placeholder="Describe el propósito o uso de esta página"
+                        value={page.purpose}
+                        onChange={(e) => handlePurposeChange(page.id, e.target.value)}
+                        className={`mt-1 ${error && page.fulfillsPurpose === "no" && !page.purpose.trim() ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -176,5 +237,5 @@ export default function PageSelection({
         )}
       </div>
     </div>
-  )
+  );
 }
