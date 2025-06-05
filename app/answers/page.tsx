@@ -16,13 +16,27 @@ type FlattenedData = {
   purpose: string
 }
 
+type ReportPage = {
+  id: string
+  name: string
+  purpose?: string
+  selected?: boolean
+}
+
+type Report = {
+  id: string
+  name: string
+  pages: ReportPage[]
+  selected?: boolean
+}
+
 type SurveyResult = {
   id: string
   timestamp: string
   name: string
   team: string
   flattenedData: FlattenedData[]
-  reports?: any[] // Mantener por compatibilidad
+  reports?: Report[] // Mantener por compatibilidad
 }
 
 export default function AnswersPage() {
