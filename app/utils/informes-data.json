@@ -1,0 +1,1806 @@
+[
+  {
+    "id": "report1",
+    "name": "0- Cuadro de mandos",
+    "pages": [
+      {
+        "id": "page2",
+        "name": "1-kpis globales"
+      },
+      {
+        "id": "page3",
+        "name": "2a-empresas"
+      },
+      {
+        "id": "page4",
+        "name": "2bEmpresa"
+      },
+      {
+        "id": "page5",
+        "name": "2c-ongs"
+      },
+      {
+        "id": "page6",
+        "name": "2d- comparativa ongs por año "
+      },
+      {
+        "id": "page7",
+        "name": "a Empresa individual"
+      },
+      {
+        "id": "page8",
+        "name": "3 Ongs individual "
+      },
+      {
+        "id": "page9",
+        "name": "Realizado semanal"
+      },
+      {
+        "id": "page10",
+        "name": "personas entrevistadas"
+      },
+      {
+        "id": "page11",
+        "name": "ptes validar y ptes entrevista"
+      },
+      {
+        "id": "page12",
+        "name": "Pendiente semanal"
+      },
+      {
+        "id": "page13",
+        "name": "tipos de ofertas"
+      },
+      {
+        "id": "page14",
+        "name": "ofertas recontratacion "
+      },
+      {
+        "id": "page15",
+        "name": "1- vista general"
+      }
+    ]
+  },
+  {
+    "id": "report2",
+    "name": "0- Direccion",
+    "pages": [
+      {
+        "id": "page17",
+        "name": "1-historico"
+      },
+      {
+        "id": "page18",
+        "name": "historico disca"
+      },
+      {
+        "id": "page19",
+        "name": "2-datos anuales"
+      },
+      {
+        "id": "page20",
+        "name": "3-KPI globales"
+      },
+      {
+        "id": "page21",
+        "name": "contratos a futuro"
+      },
+      {
+        "id": "page22",
+        "name": "contrataciones por meses"
+      },
+      {
+        "id": "page23",
+        "name": "4-envios empresa"
+      },
+      {
+        "id": "page24",
+        "name": "5-ratios por autonomia"
+      },
+      {
+        "id": "page25",
+        "name": "6-cumplim objetivo"
+      },
+      {
+        "id": "page26",
+        "name": "6 bis-cumplimiento objetivos por colectivo"
+      },
+      {
+        "id": "page27",
+        "name": "7-enviados"
+      },
+      {
+        "id": "page28",
+        "name": "8-ongs"
+      },
+      {
+        "id": "page29",
+        "name": "9-colectivos"
+      },
+      {
+        "id": "page30",
+        "name": "10-puestos"
+      },
+      {
+        "id": "page31",
+        "name": "11-total ofertas"
+      },
+      {
+        "id": "page32",
+        "name": "12-discapacidad"
+      },
+      {
+        "id": "page33",
+        "name": "13-refugiados"
+      },
+      {
+        "id": "page34",
+        "name": "13-DETALLE OFERTAS"
+      },
+      {
+        "id": "page35",
+        "name": "14-ranking"
+      },
+      {
+        "id": "page36",
+        "name": "9 bis - colectivo no prioritario y puesto"
+      },
+      {
+        "id": "page37",
+        "name": "15- mujeres atentidads y formadas"
+      },
+      {
+        "id": "page38",
+        "name": "16-anuale:mujeres atendidas y formadas "
+      },
+      {
+        "id": "page39",
+        "name": "17 de las personas contratadas cuales son formadas"
+      },
+      {
+        "id": "page40",
+        "name": "historico cumplim objetivos"
+      }
+    ]
+  },
+  {
+    "id": "report3",
+    "name": "1-balance EMPLEO",
+    "pages": [
+      {
+        "id": "page42",
+        "name": "1 datos globales empleo"
+      },
+      {
+        "id": "page43",
+        "name": "2 -empresas otro año"
+      },
+      {
+        "id": "page44",
+        "name": "3 candidatos enviados"
+      },
+      {
+        "id": "page45",
+        "name": "4 datos globales candidatos"
+      },
+      {
+        "id": "page46",
+        "name": "5 balance ongs"
+      },
+      {
+        "id": "page47",
+        "name": "6 cuidado colectivos no prioritarios"
+      },
+      {
+        "id": "page48",
+        "name": "7 contratados por puesto "
+      },
+      {
+        "id": "page49",
+        "name": "8-proyectos "
+      },
+      {
+        "id": "page50",
+        "name": "9 pax entrevistadas"
+      },
+      {
+        "id": "page51",
+        "name": "10 ANALISIS comparativa empresas"
+      },
+      {
+        "id": "page52",
+        "name": "11 Analisis colectivos"
+      },
+      {
+        "id": "page53",
+        "name": "12 formacion"
+      },
+      {
+        "id": "page54",
+        "name": "13 candidatos formados"
+      },
+      {
+        "id": "page55",
+        "name": "14 formados HUELLA SOCIAL"
+      },
+      {
+        "id": "page56",
+        "name": "Duplicado de 3 candidatos enviados ult años"
+      },
+      {
+        "id": "page57",
+        "name": "tipos de ofertas"
+      },
+      {
+        "id": "page58",
+        "name": "ofertas recontratacion "
+      }
+    ]
+  },
+  {
+    "id": "report4",
+    "name": "10- Datos para redes",
+    "pages": [
+      {
+        "id": "page60",
+        "name": "10 - Datos para redes"
+      }
+    ]
+  },
+  {
+    "id": "report5",
+    "name": "1bis - balance direccion",
+    "pages": [
+      {
+        "id": "page62",
+        "name": "1 datos globales empleo"
+      },
+      {
+        "id": "page63",
+        "name": "1 bispersonas contratadas por meses"
+      },
+      {
+        "id": "page64",
+        "name": "2 candidatos enviados ult años"
+      },
+      {
+        "id": "page65",
+        "name": "desestimacion por empresas"
+      },
+      {
+        "id": "page66",
+        "name": "3 ratios por autonomia"
+      },
+      {
+        "id": "page67",
+        "name": "4 datos globales candidaots"
+      },
+      {
+        "id": "page68",
+        "name": "5 ANALISIS comparativa empresas"
+      },
+      {
+        "id": "page69",
+        "name": "6 balance ongs"
+      },
+      {
+        "id": "page70",
+        "name": "6 cuidado colectivos no prioritarios"
+      },
+      {
+        "id": "page71",
+        "name": "ratios por autonomia"
+      },
+      {
+        "id": "page72",
+        "name": "7 contratados por puesto "
+      },
+      {
+        "id": "page73",
+        "name": "8- proyectos "
+      },
+      {
+        "id": "page74",
+        "name": "1 ANALISIS colectivos"
+      },
+      {
+        "id": "page75",
+        "name": "12 formacion "
+      },
+      {
+        "id": "page76",
+        "name": "13 candidatos formados"
+      },
+      {
+        "id": "page77",
+        "name": "14 formados HUELLLA SOCIAL"
+      },
+      {
+        "id": "page78",
+        "name": "contratados ultima semana"
+      },
+      {
+        "id": "page79",
+        "name": "entrevistados ultima semana"
+      },
+      {
+        "id": "page80",
+        "name": "seguimientos realizados por tecnico"
+      },
+      {
+        "id": "page81",
+        "name": "realizado semanal"
+      },
+      {
+        "id": "page82",
+        "name": "Pagina 1"
+      }
+    ]
+  },
+  {
+    "id": "report6",
+    "name": "2-empresas por grupo DISEÑO dataset",
+    "pages": [
+      {
+        "id": "page84",
+        "name": "FOTO EMPRESA (graficos)"
+      },
+      {
+        "id": "page85",
+        "name": "FOTO EMPRESA 2 (graficos)"
+      },
+      {
+        "id": "page86",
+        "name": "FOTO EMPRESA 2 SIN OBJETIVO (graficos)"
+      },
+      {
+        "id": "page87",
+        "name": "clasificacion contratados"
+      },
+      {
+        "id": "page88",
+        "name": "Clasificacion enviados"
+      },
+      {
+        "id": "page89",
+        "name": "Infoempresa"
+      },
+      {
+        "id": "page90",
+        "name": "datos envios"
+      },
+      {
+        "id": "page91",
+        "name": "fotos ofertas"
+      },
+      {
+        "id": "page92",
+        "name": "ofertas de la empresa"
+      },
+      {
+        "id": "page93",
+        "name": "datos globales envios"
+      },
+      {
+        "id": "page94",
+        "name": "comaprativa contratos y envios"
+      },
+      {
+        "id": "page95",
+        "name": "INFORMACION POR ESTADOS DE LOS ENVIADOS"
+      },
+      {
+        "id": "page96",
+        "name": "ENVIADOS A EMPRESA"
+      },
+      {
+        "id": "page97",
+        "name": "Graficos enviados"
+      },
+      {
+        "id": "page98",
+        "name": "contratados por empresa"
+      },
+      {
+        "id": "page99",
+        "name": "datos para el ministerio"
+      },
+      {
+        "id": "page100",
+        "name": "datos para reuniones con empresas"
+      },
+      {
+        "id": "page101",
+        "name": "enviados por tipo de oferta"
+      },
+      {
+        "id": "page102",
+        "name": "listado para enviar a la empresa"
+      },
+      {
+        "id": "page103",
+        "name": "Calificacion enviados"
+      },
+      {
+        "id": "page104",
+        "name": "Calificacion enviados 2"
+      },
+      {
+        "id": "page105",
+        "name": "atendidos de otros años"
+      },
+      {
+        "id": "page106",
+        "name": "Empleo indirecto"
+      },
+      {
+        "id": "page107",
+        "name": "proveedores o clientes"
+      },
+      {
+        "id": "page108",
+        "name": "reportes consolidados empresas"
+      },
+      {
+        "id": "page109",
+        "name": "datos candidatos con colecitvo: NO ENVIAR"
+      },
+      {
+        "id": "page110",
+        "name": "Ficha para enviar a empresas ante un foro"
+      },
+      {
+        "id": "page111",
+        "name": "Datos ministerio de todas las empresas"
+      },
+      {
+        "id": "page112",
+        "name": "todas las empresas de la bbdd"
+      },
+      {
+        "id": "page113",
+        "name": "indentificacion de colectivos"
+      }
+    ]
+  },
+  {
+    "id": "report7",
+    "name": "20-Comunicación",
+    "pages": [
+      {
+        "id": "page115",
+        "name": "1 evolucion comunicación"
+      },
+      {
+        "id": "page116",
+        "name": "2 comunicación-1"
+      },
+      {
+        "id": "page117",
+        "name": "3 comunicación 2"
+      },
+      {
+        "id": "page118",
+        "name": "4 comunicación-proyectos"
+      },
+      {
+        "id": "page119",
+        "name": "5 comunicación listado"
+      },
+      {
+        "id": "page120",
+        "name": "6 proyectos asignados"
+      },
+      {
+        "id": "page121",
+        "name": "7 entrevistadas"
+      }
+    ]
+  },
+  {
+    "id": "report8",
+    "name": "2c - socia y patronas",
+    "pages": [
+      {
+        "id": "page123",
+        "name": "1 datos globales empleo"
+      },
+      {
+        "id": "page124",
+        "name": "NACIONAL"
+      },
+      {
+        "id": "page125",
+        "name": "2-Madrid"
+      },
+      {
+        "id": "page126",
+        "name": "3-Barcelona"
+      },
+      {
+        "id": "page127",
+        "name": "4-Andalucia"
+      },
+      {
+        "id": "page128",
+        "name": "5-valencia"
+      },
+      {
+        "id": "page129",
+        "name": "6-baleares"
+      },
+      {
+        "id": "page130",
+        "name": "7-aragon"
+      },
+      {
+        "id": "page131",
+        "name": "8-Canarias"
+      },
+      {
+        "id": "page132",
+        "name": "4-FORMADOS Y VOLUNTARIOS"
+      },
+      {
+        "id": "page133",
+        "name": "EMPLEO INDIRECTO"
+      },
+      {
+        "id": "page134",
+        "name": "2-Autonomias"
+      }
+    ]
+  },
+  {
+    "id": "report9",
+    "name": "3-empresas sin grupo",
+    "pages": [
+      {
+        "id": "page136",
+        "name": "1.FOTO EMPRESA (graficos)"
+      },
+      {
+        "id": "page137",
+        "name": "2.FOTO EMPRESA 2 (graficos)"
+      },
+      {
+        "id": "page138",
+        "name": "3.PERSONAS ENVIADAS A LA EMPRESA"
+      },
+      {
+        "id": "page139",
+        "name": "4.FOTO EMPRESA 2 SIN OBJETIVO (graficos)"
+      },
+      {
+        "id": "page140",
+        "name": "5.foto ofertas"
+      },
+      {
+        "id": "page141",
+        "name": "6.info empresa"
+      },
+      {
+        "id": "page142",
+        "name": "7.ofertas"
+      },
+      {
+        "id": "page143",
+        "name": "8.datos para el ministerio"
+      },
+      {
+        "id": "page144",
+        "name": "9.datos globales envios"
+      },
+      {
+        "id": "page145",
+        "name": "10.contratados por empresa"
+      },
+      {
+        "id": "page146",
+        "name": "11.Comparativa contratos y envios"
+      },
+      {
+        "id": "page147",
+        "name": "12.LISTADO PARA ENVIAR A LA EMPRESA"
+      },
+      {
+        "id": "page148",
+        "name": "13.ENVIADOS A EMPRESA"
+      }
+    ]
+  },
+  {
+    "id": "report10",
+    "name": "4-Candidatos activos empleo",
+    "pages": [
+      {
+        "id": "page150",
+        "name": "1-Ofertas abiertas"
+      },
+      {
+        "id": "page151",
+        "name": "1-bisOfertas desiertas"
+      },
+      {
+        "id": "page152",
+        "name": "2-Candidatos para optimizar busquedas"
+      },
+      {
+        "id": "page153",
+        "name": "3- Activos por puesto y colectivo"
+      },
+      {
+        "id": "page154",
+        "name": "4-Candidatos activos para cubrir oferta"
+      },
+      {
+        "id": "page155",
+        "name": "5- A 15 dias de fecha prevista de baja"
+      },
+      {
+        "id": "page156",
+        "name": "5bis -Fecha prevista alcanzada de baja"
+      },
+      {
+        "id": "page157",
+        "name": "6-Ptes validar - ptes entrev int"
+      },
+      {
+        "id": "page158",
+        "name": "7-Activos sin envios"
+      },
+      {
+        "id": "page159",
+        "name": "8-ptes feedback-valoracion empresa"
+      },
+      {
+        "id": "page160",
+        "name": "9-Listados sin seg"
+      },
+      {
+        "id": "page161",
+        "name": "Destimados por integra"
+      },
+      {
+        "id": "page162",
+        "name": "Formadas sin envios"
+      },
+      {
+        "id": "page163",
+        "name": "10-Total candidatos"
+      },
+      {
+        "id": "page164",
+        "name": "11-Listado para formacion"
+      },
+      {
+        "id": "page165",
+        "name": "12-Candidatos contratados"
+      },
+      {
+        "id": "page166",
+        "name": "13-Disca-candidatos contratados"
+      },
+      {
+        "id": "page167",
+        "name": "14-Disca-candidatos recibidos"
+      },
+      {
+        "id": "page168",
+        "name": "15-Disca-candidatos entrevistados"
+      },
+      {
+        "id": "page169",
+        "name": "16-Revision de activos"
+      },
+      {
+        "id": "page170",
+        "name": "17-Carcel-atendidos"
+      },
+      {
+        "id": "page171",
+        "name": "18-Carcel-contratados"
+      },
+      {
+        "id": "page172",
+        "name": "baja integra"
+      },
+      {
+        "id": "page173",
+        "name": "personas activas sin contratacion el ultimo año"
+      },
+      {
+        "id": "page174",
+        "name": "control alta candidatos"
+      },
+      {
+        "id": "page175",
+        "name": "control contratos"
+      },
+      {
+        "id": "page176",
+        "name": "Duplicado de 7 -Activos sin envios"
+      },
+      {
+        "id": "page177",
+        "name": "ofertas gestionadas"
+      },
+      {
+        "id": "page178",
+        "name": "Refugiados para regularizacion"
+      },
+      {
+        "id": "page179",
+        "name": "Pagina 1"
+      }
+    ]
+  },
+  {
+    "id": "report11",
+    "name": "5-ONGS",
+    "pages": [
+      {
+        "id": "page181",
+        "name": "1 FOTO ONG"
+      },
+      {
+        "id": "page182",
+        "name": "2 BALANCE ONGS"
+      },
+      {
+        "id": "page183",
+        "name": "3 PERSONAS ACTIVAS"
+      },
+      {
+        "id": "page184",
+        "name": "4 contratadas"
+      },
+      {
+        "id": "page185",
+        "name": "5 entrevistas integra"
+      },
+      {
+        "id": "page186",
+        "name": "6 personas atendidas"
+      },
+      {
+        "id": "page187",
+        "name": "7 contratadas y entrevistadas con nombre"
+      },
+      {
+        "id": "page188",
+        "name": "8 nombres petes validar y de entrevista"
+      },
+      {
+        "id": "page189",
+        "name": "foto para mandar ongs"
+      },
+      {
+        "id": "page190",
+        "name": "pax contratadas para enviar"
+      },
+      {
+        "id": "page191",
+        "name": "personas activas apra enviar"
+      },
+      {
+        "id": "page192",
+        "name": "ong con usuarios"
+      }
+    ]
+  },
+  {
+    "id": "report12",
+    "name": "6- Datos globales empleo",
+    "pages": [
+      {
+        "id": "page194",
+        "name": "1-Vision global cuidad"
+      },
+      {
+        "id": "page195",
+        "name": "2-Pendiente Semanal"
+      },
+      {
+        "id": "page196",
+        "name": "3-Info empresa"
+      },
+      {
+        "id": "page197",
+        "name": "4-Ptes feedback y valoracion"
+      },
+      {
+        "id": "page198",
+        "name": "5-Ptes valida -ptes entrevista"
+      },
+      {
+        "id": "page199",
+        "name": "6- Ofertas abiertas"
+      },
+      {
+        "id": "page200",
+        "name": "personas enviadas a ofertas gestionadas"
+      },
+      {
+        "id": "page201",
+        "name": "ofertas total"
+      },
+      {
+        "id": "page202",
+        "name": "Ofertas desiertas"
+      },
+      {
+        "id": "page203",
+        "name": "7-Listado sin seg"
+      },
+      {
+        "id": "page204",
+        "name": "8-Contratados externamente"
+      },
+      {
+        "id": "page205",
+        "name": "13-Activos sin envios"
+      },
+      {
+        "id": "page206",
+        "name": "9bis-Fecha p baja en 15 diasPagina 3"
+      },
+      {
+        "id": "page207",
+        "name": "9- fecha prevista baja alcanzada con empresa"
+      },
+      {
+        "id": "page208",
+        "name": "10-PERSONAS ENTREVISTADAS"
+      },
+      {
+        "id": "page209",
+        "name": "11- Balance ongs"
+      },
+      {
+        "id": "page210",
+        "name": "12-Candidatos por ong"
+      },
+      {
+        "id": "page211",
+        "name": "14-Candidatos enviados ultimos años"
+      },
+      {
+        "id": "page212",
+        "name": "15-colectivos"
+      },
+      {
+        "id": "page213",
+        "name": "16-Realizado semanal"
+      },
+      {
+        "id": "page214",
+        "name": "17-Seguimiento todos los candidatos"
+      },
+      {
+        "id": "page215",
+        "name": "18-Seg realizados por tecnico"
+      },
+      {
+        "id": "page216",
+        "name": "18 bis-actividad semanal por tecnico"
+      },
+      {
+        "id": "page217",
+        "name": "19-Enviados a empresa"
+      },
+      {
+        "id": "page218",
+        "name": "20-Proyectos"
+      },
+      {
+        "id": "page219",
+        "name": "21-Envios de proyectos"
+      },
+      {
+        "id": "page220",
+        "name": "22-Fechas inicio y fin de ofertas"
+      },
+      {
+        "id": "page221",
+        "name": "23-Candidatos contratados"
+      },
+      {
+        "id": "page222",
+        "name": "24-Contratos por persona"
+      },
+      {
+        "id": "page223",
+        "name": "contrataciones proactivas1"
+      },
+      {
+        "id": "page224",
+        "name": "Todos Activos"
+      },
+      {
+        "id": "page225",
+        "name": "baja integra sin tic no reativar"
+      },
+      {
+        "id": "page226",
+        "name": "estudiar ofertas"
+      },
+      {
+        "id": "page227",
+        "name": "Duplicado de estudiar ofertas"
+      },
+      {
+        "id": "page228",
+        "name": "datos ministerios de todas empresas"
+      },
+      {
+        "id": "page229",
+        "name": "candidatos del 2001"
+      },
+      {
+        "id": "page230",
+        "name": "seguimientos profundos realizados"
+      },
+      {
+        "id": "page231",
+        "name": "seguimiento de candidatos"
+      }
+    ]
+  },
+  {
+    "id": "report13",
+    "name": "7-Direccion empleo",
+    "pages": [
+      {
+        "id": "page233",
+        "name": "1.kpi globales"
+      },
+      {
+        "id": "page234",
+        "name": "2.datos globales contratacion"
+      },
+      {
+        "id": "page235",
+        "name": "3.cumplimiento objetivos por autonomia"
+      },
+      {
+        "id": "page236",
+        "name": "4.envios y ofertas por empresa"
+      },
+      {
+        "id": "page237",
+        "name": "5. ratios y ofertas por empresa"
+      },
+      {
+        "id": "page238",
+        "name": "6.ofertas"
+      },
+      {
+        "id": "page239",
+        "name": "7.total ofertas"
+      },
+      {
+        "id": "page240",
+        "name": "8.empresas"
+      },
+      {
+        "id": "page241",
+        "name": "9.candidatos enviados"
+      },
+      {
+        "id": "page242",
+        "name": "10.balance ong"
+      },
+      {
+        "id": "page243",
+        "name": "11.cuidado colcetivos no prioritarios"
+      },
+      {
+        "id": "page244",
+        "name": "12.pendiente semanal"
+      },
+      {
+        "id": "page245",
+        "name": "13.ofertas activas"
+      },
+      {
+        "id": "page246",
+        "name": "14.contratados por tipo contrato y duracion"
+      },
+      {
+        "id": "page247",
+        "name": "15.datos globales contratacion con tipo contrato"
+      },
+      {
+        "id": "page248",
+        "name": "CONTROL CONTRATOS"
+      },
+      {
+        "id": "page249",
+        "name": "CONTROL CREACION CANDIDATOS"
+      }
+    ]
+  },
+  {
+    "id": "report14",
+    "name": "8-Datos patronato",
+    "pages": [
+      {
+        "id": "page251",
+        "name": "1 info Una empresa para patronato"
+      },
+      {
+        "id": "page252",
+        "name": "2 personas trabajando patronos"
+      },
+      {
+        "id": "page253",
+        "name": "3 CONTRATACIONES"
+      },
+      {
+        "id": "page254",
+        "name": "contratatados por nacionalidad"
+      },
+      {
+        "id": "page255",
+        "name": "4 objetivos 20-21"
+      },
+      {
+        "id": "page256",
+        "name": "5 trabajando"
+      },
+      {
+        "id": "page257",
+        "name": "6 POR COLECTIVO"
+      },
+      {
+        "id": "page258",
+        "name": "7 POR PUESTO"
+      },
+      {
+        "id": "page259",
+        "name": "8 contratos covid"
+      },
+      {
+        "id": "page260",
+        "name": "9 formacion"
+      },
+      {
+        "id": "page261",
+        "name": "10 enviados pendientes de feedback por empresa y cuidad"
+      },
+      {
+        "id": "page262",
+        "name": "11 ptes valoracion por empresa  y cuidad"
+      },
+      {
+        "id": "page263",
+        "name": "12 colectivos, puestos y formacion una empresa para patronato"
+      }
+    ]
+  },
+  {
+    "id": "report15",
+    "name": "9-Proyectos ",
+    "pages": [
+      {
+        "id": "page265",
+        "name": "1-Todos los proyectos"
+      },
+      {
+        "id": "page266",
+        "name": "2-Asignados a todos los proyectos de una CCAA"
+      },
+      {
+        "id": "page267",
+        "name": "3-ASIGANDOS"
+      },
+      {
+        "id": "page268",
+        "name": "4-Informacion ASIGANDOSen detalle"
+      },
+      {
+        "id": "page269",
+        "name": "3BIS-FORMADOS"
+      },
+      {
+        "id": "page270",
+        "name": "5-CONTRATADOS"
+      },
+      {
+        "id": "page271",
+        "name": "6-Detalle de candidatos contratados"
+      },
+      {
+        "id": "page272",
+        "name": "7-CALIFICACION ASIGNADOS"
+      },
+      {
+        "id": "page273",
+        "name": "8-CLASIF CONTRATADOS"
+      },
+      {
+        "id": "page274",
+        "name": "9-RESUMEN PROYECTOS"
+      },
+      {
+        "id": "page275",
+        "name": "proyectos por provincias"
+      },
+      {
+        "id": "page276",
+        "name": "10-Contratacion update"
+      },
+      {
+        "id": "page277",
+        "name": "Control Asignados/contratados"
+      },
+      {
+        "id": "page278",
+        "name": "personas con proyectos solapados"
+      },
+      {
+        "id": "page279",
+        "name": "asignados a cada proyecto por colectivo "
+      },
+      {
+        "id": "page280",
+        "name": "11-PARA ASIGANAR: FORMADOS y CONTRATADOS"
+      },
+      {
+        "id": "page281",
+        "name": "12-PARA ASIGANAR:FORMADOS"
+      },
+      {
+        "id": "page282",
+        "name": "13-PARA ASIGNAR:ENTREVISTADOS"
+      },
+      {
+        "id": "page283",
+        "name": "14-PARA ASIGNAR:CONTRATADOS"
+      },
+      {
+        "id": "page284",
+        "name": "16- Formacion de candidatos"
+      },
+      {
+        "id": "page285",
+        "name": "17-Candidatos enviados"
+      },
+      {
+        "id": "page286",
+        "name": "17 bis -Cotratados externamente"
+      },
+      {
+        "id": "page287",
+        "name": "18-Mentoring - coaching"
+      },
+      {
+        "id": "page288",
+        "name": "19-EMAUS"
+      },
+      {
+        "id": "page289",
+        "name": "20-Seguimiento emaus"
+      },
+      {
+        "id": "page290",
+        "name": "21-Personas realizan emaus"
+      },
+      {
+        "id": "page291",
+        "name": "23-seguimiento ufv"
+      },
+      {
+        "id": "page292",
+        "name": "24-Interesados univ o fp"
+      },
+      {
+        "id": "page293",
+        "name": "25-Potencial ufv"
+      },
+      {
+        "id": "page294",
+        "name": "26-Candidatos con contrato en madird"
+      },
+      {
+        "id": "page295",
+        "name": "22-duplicado de todos los proyectos"
+      },
+      {
+        "id": "page296",
+        "name": "candidatos entrevistados/formados/contratados"
+      },
+      {
+        "id": "page297",
+        "name": "ver formados y contratados por una empresa"
+      },
+      {
+        "id": "page298",
+        "name": "formados en un año "
+      },
+      {
+        "id": "page299",
+        "name": "datos de todos los proyectos con objetivos"
+      },
+      {
+        "id": "page300",
+        "name": "DETALLE ENVIADOS ENDESA edic anteriores"
+      },
+      {
+        "id": "page301",
+        "name": "objetivos y realizado proyectos"
+      },
+      {
+        "id": "page302",
+        "name": "ENDESA otras ediciones"
+      },
+      {
+        "id": "page303",
+        "name": "ENDESA edicion actual"
+      },
+      {
+        "id": "page304",
+        "name": "caNDIDATOS SIN COACHING"
+      },
+      {
+        "id": "page305",
+        "name": "CONTRATADOS EXTERNAMENTE"
+      },
+      {
+        "id": "page306",
+        "name": "lgd asignado"
+      },
+      {
+        "id": "page307",
+        "name": "Todos los proyectos"
+      },
+      {
+        "id": "page308",
+        "name": "Pagina 1"
+      }
+    ]
+  },
+  {
+    "id": "report16",
+    "name": "A-Huella social",
+    "pages": [
+      {
+        "id": "page310",
+        "name": "1-COMUNIDAD"
+      },
+      {
+        "id": "page311",
+        "name": "2-EMPLEADOS"
+      },
+      {
+        "id": "page312",
+        "name": "3-EMPRESAS PARTICIPADAS"
+      },
+      {
+        "id": "page313",
+        "name": "4-empleados participadas"
+      },
+      {
+        "id": "page314",
+        "name": "5-Resumen participadas"
+      },
+      {
+        "id": "page315",
+        "name": "SROI"
+      },
+      {
+        "id": "page316",
+        "name": "ROI"
+      },
+      {
+        "id": "page317",
+        "name": "sroi baja ese año"
+      },
+      {
+        "id": "page318",
+        "name": "graficos personas enviadas"
+      },
+      {
+        "id": "page319",
+        "name": "Pagina 1"
+      }
+    ]
+  },
+  {
+    "id": "report17",
+    "name": "Abis-PROVEEDORES",
+    "pages": [
+      {
+        "id": "page321",
+        "name": "Abis-RPOVEEDORES"
+      }
+    ]
+  },
+  {
+    "id": "report18",
+    "name": "F.1-datos formacion GLOBAL",
+    "pages": [
+      {
+        "id": "page323",
+        "name": "0-PLANIFICACION"
+      },
+      {
+        "id": "page324",
+        "name": "1-VOLUNTARIOS"
+      },
+      {
+        "id": "page325",
+        "name": "VOLUNTARIOS VIP"
+      },
+      {
+        "id": "page326",
+        "name": "2-DETALLE DE DATOS GLOBALES"
+      },
+      {
+        "id": "page327",
+        "name": "3-TALLERES IMPARTIDOS"
+      },
+      {
+        "id": "page328",
+        "name": "4-CANDIDATOS"
+      },
+      {
+        "id": "page329",
+        "name": "5-TU LO HAS HECHO POSIBLE"
+      },
+      {
+        "id": "page330",
+        "name": "6CONTRATADOS EXTERNAMENTE TRAS TALLER"
+      },
+      {
+        "id": "page331",
+        "name": "Errores formacion"
+      },
+      {
+        "id": "page332",
+        "name": "para imputar a caixa"
+      },
+      {
+        "id": "page333",
+        "name": "ciudades- sodoku lanificado"
+      },
+      {
+        "id": "page334",
+        "name": "ciudades-sodoku actualizado"
+      },
+      {
+        "id": "page335",
+        "name": "IT-sodoku planificado"
+      },
+      {
+        "id": "page336",
+        "name": "IT-sodoku actualizado"
+      },
+      {
+        "id": "page337",
+        "name": "madrid-sodoku planificado EF"
+      },
+      {
+        "id": "page338",
+        "name": "madrid sodoku actualizado ef"
+      },
+      {
+        "id": "page339",
+        "name": "ANEXO I  - CITADOS/ASISTEN IT"
+      },
+      {
+        "id": "page340",
+        "name": "ANEXO I - CITADOS/ASISTEN EF"
+      },
+      {
+        "id": "page341",
+        "name": "ANEXO II - grupo empresa"
+      },
+      {
+        "id": "page342",
+        "name": "ANEXO III - Voluntarios vip"
+      },
+      {
+        "id": "page343",
+        "name": "DURACION TALLERES"
+      },
+      {
+        "id": "page344",
+        "name": "Pagina 1"
+      },
+      {
+        "id": "page345",
+        "name": "participacion y horas impartidas"
+      },
+      {
+        "id": "page346",
+        "name": "2- resumen estados"
+      },
+      {
+        "id": "page347",
+        "name": "total 3 -talleres por empresa"
+      }
+    ]
+  },
+  {
+    "id": "report19",
+    "name": "F2- ESCUELA DE FORTALECIMIENTO",
+    "pages": [
+      {
+        "id": "page349",
+        "name": "5-LISTADO PARA FORMACION"
+      },
+      {
+        "id": "page350",
+        "name": "6-ASISTENCIA A EF"
+      },
+      {
+        "id": "page351",
+        "name": "7- con pocos talleres para completar formacion"
+      },
+      {
+        "id": "page352",
+        "name": "4-CORRECCION ERRORES BBDD"
+      },
+      {
+        "id": "page353",
+        "name": "8-FORMADOS SIN ENVIOS"
+      },
+      {
+        "id": "page354",
+        "name": "9-ENTREVISTADOS INT y NO ENVIADOS A EF"
+      },
+      {
+        "id": "page355",
+        "name": "10-TALLERES IMPARTIDOS"
+      },
+      {
+        "id": "page356",
+        "name": "TU LO HAS HECHO POSIBLE EF"
+      },
+      {
+        "id": "page357",
+        "name": "11-VOLUNTARIOS"
+      },
+      {
+        "id": "page358",
+        "name": "12-Voluntarios balance"
+      },
+      {
+        "id": "page359",
+        "name": "13-DATOS MEMORIAS RSC"
+      },
+      {
+        "id": "page360",
+        "name": "14-SEGUIMIENTO ENCUESTAS"
+      },
+      {
+        "id": "page361",
+        "name": "16-RESPUESTAS CANDIDATOS MADRID"
+      },
+      {
+        "id": "page362",
+        "name": "15-RESPUESTAS VOLUNTARIOS"
+      },
+      {
+        "id": "page363",
+        "name": "17-RESPUESTAS CANDIDATOS CUIDADES"
+      },
+      {
+        "id": "page364",
+        "name": "13 formacion"
+      },
+      {
+        "id": "page365",
+        "name": "5-todos los talleres ofertados"
+      },
+      {
+        "id": "page366",
+        "name": "15 ofertas planificacion"
+      },
+      {
+        "id": "page367",
+        "name": "16 voluntarios planificacion"
+      },
+      {
+        "id": "page368",
+        "name": "24 Datos voluntarios y cesion de imagen"
+      },
+      {
+        "id": "page369",
+        "name": "17 empresas"
+      },
+      {
+        "id": "page370",
+        "name": "19 CERTIFICADOS VOLUNTARIADO"
+      },
+      {
+        "id": "page371",
+        "name": "23 asistencia formacion"
+      },
+      {
+        "id": "page372",
+        "name": "entrevistados no formados"
+      },
+      {
+        "id": "page373",
+        "name": "Duplicado de 7 - con pocos talleres para competar formacion"
+      },
+      {
+        "id": "page374",
+        "name": "SODOKU PLANIFICACION"
+      },
+      {
+        "id": "page375",
+        "name": "1BIS-PLANIFICACION EMPRESAS"
+      },
+      {
+        "id": "page376",
+        "name": "encuesta candidatos"
+      },
+      {
+        "id": "page377",
+        "name": "graficos encuesta candidatos ef"
+      }
+    ]
+  },
+  {
+    "id": "report20",
+    "name": "F3-INTEGRA TECH",
+    "pages": [
+      {
+        "id": "page379",
+        "name": "4-CORRECCION ERRORES BBDD"
+      },
+      {
+        "id": "page380",
+        "name": "5-LISTADO PARA FORMACION"
+      },
+      {
+        "id": "page381",
+        "name": "6-ASISTENCIA A IT"
+      },
+      {
+        "id": "page382",
+        "name": "6 bis-Formados en ef sin IT"
+      },
+      {
+        "id": "page383",
+        "name": "7-para completar formacion"
+      },
+      {
+        "id": "page384",
+        "name": "8-FORMADOS SIN ENVIOS"
+      },
+      {
+        "id": "page385",
+        "name": "10-TALLERES IMPARTIDOS"
+      },
+      {
+        "id": "page386",
+        "name": "11-VOLUNTARIOS"
+      },
+      {
+        "id": "page387",
+        "name": "12-Voluntarios balance"
+      },
+      {
+        "id": "page388",
+        "name": "13-DATOS MEMORIAS RSC"
+      },
+      {
+        "id": "page389",
+        "name": "14-SEGUIMIENTO ENCUESTAS"
+      },
+      {
+        "id": "page390",
+        "name": "15-RESPUESTAS VOLUNTARIOS"
+      },
+      {
+        "id": "page391",
+        "name": "16-RESPUESTAS CANDIDATOS"
+      },
+      {
+        "id": "page392",
+        "name": "13 formacion"
+      },
+      {
+        "id": "page393",
+        "name": "5-todos los talleres ofertados"
+      },
+      {
+        "id": "page394",
+        "name": "15 ofertas planificacion"
+      },
+      {
+        "id": "page395",
+        "name": "16 voluntarios planificacion"
+      },
+      {
+        "id": "page396",
+        "name": "24 Datos voluntarios y cesion de imagen"
+      },
+      {
+        "id": "page397",
+        "name": "17 empresas"
+      },
+      {
+        "id": "page398",
+        "name": "19 CERTIFICADOS VOLUNTARIADO"
+      },
+      {
+        "id": "page399",
+        "name": "20 ANULAR: formaciones por provincia"
+      },
+      {
+        "id": "page400",
+        "name": "23 asistencia formacion"
+      }
+    ]
+  },
+  {
+    "id": "report21",
+    "name": "F4. FORMACION INDIVIDUAL",
+    "pages": [
+      {
+        "id": "page402",
+        "name": "1- Mentoring-Cuadro de mando"
+      },
+      {
+        "id": "page403",
+        "name": "2-cuadro de case mentoring"
+      },
+      {
+        "id": "page404",
+        "name": "3-mentee con entrevista selección de proyecto"
+      },
+      {
+        "id": "page405",
+        "name": "4.mentoring sesiones"
+      },
+      {
+        "id": "page406",
+        "name": "5-Mentoring INFORMACION MENTOR"
+      },
+      {
+        "id": "page407",
+        "name": "6-mentoring- historico seguimientos"
+      },
+      {
+        "id": "page408",
+        "name": "7-Mentoring-instantanea en fecha"
+      },
+      {
+        "id": "page409",
+        "name": "7-multiempresa:envios y estados"
+      },
+      {
+        "id": "page410",
+        "name": "8-multiempresa-informacion candidato"
+      },
+      {
+        "id": "page411",
+        "name": "9-multiempresa:informacion mentor-mentee"
+      },
+      {
+        "id": "page412",
+        "name": "5.Datos voluntarios y cesion de imagen"
+      },
+      {
+        "id": "page413",
+        "name": "6.coaching marta"
+      },
+      {
+        "id": "page414",
+        "name": "7.Coaching-Cuadro de mando"
+      },
+      {
+        "id": "page415",
+        "name": "8.Coachs"
+      },
+      {
+        "id": "page416",
+        "name": "coach disponible"
+      },
+      {
+        "id": "page417",
+        "name": "TU LO HAS HECHO POSIBLE"
+      },
+      {
+        "id": "page418",
+        "name": "realizado semanal"
+      },
+      {
+        "id": "page419",
+        "name": "Coaching-Contratados"
+      },
+      {
+        "id": "page420",
+        "name": "contactos semanal coachs"
+      },
+      {
+        "id": "page421",
+        "name": "coachees con sesiones"
+      },
+      {
+        "id": "page422",
+        "name": "Seguimiento en curso"
+      },
+      {
+        "id": "page423",
+        "name": "Coachees con fechas"
+      },
+      {
+        "id": "page424",
+        "name": "compromisos confide"
+      },
+      {
+        "id": "page425",
+        "name": "evaluaciones de aptos"
+      },
+      {
+        "id": "page426",
+        "name": "Pagina 1"
+      },
+      {
+        "id": "page427",
+        "name": "Duplicado de Seguimiento en curso"
+      }
+    ]
+  },
+  {
+    "id": "report22",
+    "name": "F5- BALANCE FORMACION FINAL",
+    "pages": [
+      {
+        "id": "page429",
+        "name": "CANDIDATOS"
+      },
+      {
+        "id": "page430",
+        "name": "Candidatos EF"
+      },
+      {
+        "id": "page431",
+        "name": "Candidatos EF -año anterior"
+      },
+      {
+        "id": "page432",
+        "name": "Candidatos IT"
+      },
+      {
+        "id": "page433",
+        "name": "Voluntarios "
+      },
+      {
+        "id": "page434",
+        "name": "Voluntarios IT"
+      },
+      {
+        "id": "page435",
+        "name": "Voluntarios IT"
+      },
+      {
+        "id": "page436",
+        "name": "empresas"
+      },
+      {
+        "id": "page437",
+        "name": "proyectos"
+      },
+      {
+        "id": "page438",
+        "name": "para proyectos IT: volunt y candi"
+      },
+      {
+        "id": "page439",
+        "name": "para proyectos ef: Volunt y candi"
+      },
+      {
+        "id": "page440",
+        "name": "por empresa: formados y contratados"
+      }
+    ]
+  }
+]

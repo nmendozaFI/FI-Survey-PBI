@@ -1,103 +1,149 @@
-import Image from "next/image";
+"use client"
+
+import { useState } from "react"
+import { Card, CardContent } from "@/components/ui/card"
+
+import reportsData from "./utils/informes-data.json"
+import StepIndicator from "./components/step-indicator"
+import TeamForm from "./components/team-form"
+import ReportSelection from "./components/report-section"
+import PageSelection from "./components/page-section"
+import SurveySummary from "./components/survey-summary"
+
+export type Report = {
+  id: string
+  name: string
+  pages: {
+    id: string
+    name: string
+    purpose?: string
+    selected?: boolean
+  }[]
+  selected?: boolean
+}
+
+export type SurveyData = {
+  name: string
+  team: string
+  reports: Report[]
+}
+
+const initialReports: Report[] = reportsData
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [currentStep, setCurrentStep] = useState(1)
+  const [surveyData, setSurveyData] = useState<SurveyData>({
+    name: "",
+    team: "",
+    reports: initialReports,
+  })
+  const [currentReportIndex, setCurrentReportIndex] = useState(0)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+  const selectedReports = surveyData.reports.filter((report) => report.selected)
+
+  const handleTeamSubmit = (name: string, team: string) => {
+    setSurveyData((prev) => ({ ...prev, name, team }))
+    setCurrentStep(2)
+  }
+
+  const handleReportSelection = (selectedReports: Report[]) => {
+    setSurveyData((prev) => ({
+      ...prev,
+      reports: prev.reports.map((report) => ({
+        ...report,
+        selected: selectedReports.some((r) => r.id === report.id),
+      })),
+    }))
+    setCurrentStep(3)
+    setCurrentReportIndex(0)
+  }
+
+  const handlePageSelection = (
+    reportId: string,
+    pages: { id: string; name: string; purpose?: string; selected?: boolean }[],
+  ) => {
+    setSurveyData((prev) => ({
+      ...prev,
+      reports: prev.reports.map((report) => (report.id === reportId ? { ...report, pages } : report)),
+    }))
+  }
+
+  const handleNextReport = () => {
+    const nextIndex = currentReportIndex + 1
+    if (nextIndex < selectedReports.length) {
+      setCurrentReportIndex(nextIndex)
+    }
+  }
+
+  const handlePreviousReport = () => {
+    const prevIndex = currentReportIndex - 1
+    if (prevIndex >= 0) {
+      setCurrentReportIndex(prevIndex)
+    }
+  }
+
+  const handleFinishSurvey = () => {
+    // Save survey data to localStorage
+    const surveyResult = {
+      id: Date.now().toString(),
+      timestamp: new Date().toISOString(),
+      name: surveyData.name,
+      team: surveyData.team,
+      reports: surveyData.reports.filter((report) => report.selected),
+    }
+
+    const existingResults = JSON.parse(localStorage.getItem("surveyResults") || "[]")
+    existingResults.push(surveyResult)
+    localStorage.setItem("surveyResults", JSON.stringify(existingResults))
+
+    setCurrentStep(4)
+  }
+
+  const handleReset = () => {
+    setSurveyData({
+      name: "",
+      team: "",
+      reports: initialReports,
+    })
+    setCurrentStep(1)
+    setCurrentReportIndex(0)
+  }
+
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-between p-4 md:p-8">
+      <div className="w-full max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold text-center mb-8">Encuesta de Uso de Power BI</h1>
+
+        <StepIndicator currentStep={currentStep} totalSteps={4} labels={["Datos", "Informes", "Páginas", "Resumen"]} />
+
+        <Card className="mt-6">
+          <CardContent className="pt-6">
+            {currentStep === 1 && (
+              <TeamForm onSubmit={handleTeamSubmit} initialName={surveyData.name} initialTeam={surveyData.team} />
+            )}
+
+            {currentStep === 2 && <ReportSelection reports={surveyData.reports} onSubmit={handleReportSelection} />}
+
+            {currentStep === 3 && selectedReports.length > 0 && (
+              <PageSelection
+                report={selectedReports[currentReportIndex]}
+                onSubmit={handlePageSelection}
+                reportIndex={currentReportIndex + 1}
+                totalReports={selectedReports.length}
+                onBack={handlePreviousReport}
+                onNext={handleNextReport}
+                onFinish={handleFinishSurvey}
+                canGoBack={currentReportIndex > 0}
+                canGoNext={currentReportIndex < selectedReports.length - 1}
+                isLastReport={currentReportIndex === selectedReports.length - 1}
+              />
+            )}
+
+            {currentStep === 4 && <SurveySummary surveyData={surveyData} onReset={handleReset} />}
+          </CardContent>
+        </Card>
+      </div>
+    </main>
+  )
 }
+
