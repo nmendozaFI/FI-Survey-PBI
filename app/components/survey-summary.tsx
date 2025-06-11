@@ -236,7 +236,7 @@ export default function SurveySummary({
               <TableHead>Informe</TableHead>
               <TableHead>Página</TableHead>
               <TableHead>¿Cumple su propósito?</TableHead>
-              <TableHead>Propósito alternativo</TableHead>
+              <TableHead>¿Para que consultas TU esta página?</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

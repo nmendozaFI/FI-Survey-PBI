@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleAlert } from "lucide-react";
 import type { Report } from "@/app/page";
 import {
   Select,
@@ -14,6 +14,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface PageSelectionProps {
   report: Report;
@@ -54,7 +59,7 @@ export default function PageSelection({
       ...page,
       selected: page.selected || false,
       purpose: page.purpose || "",
-      fulfillsPurpose: page.fulfillsPurpose ? page.fulfillsPurpose : "si"
+      fulfillsPurpose: page.fulfillsPurpose ? page.fulfillsPurpose : "si",
     }))
   );
   const [error, setError] = useState("");
@@ -66,7 +71,7 @@ export default function PageSelection({
         ...page,
         selected: page.selected || false,
         purpose: page.purpose || "",
-        fulfillsPurpose: page.fulfillsPurpose ? page.fulfillsPurpose : "si"
+        fulfillsPurpose: page.fulfillsPurpose ? page.fulfillsPurpose : "si",
       }))
     );
     setError("");
@@ -87,9 +92,16 @@ export default function PageSelection({
     );
   };
 
-  const handleFulfillsPurposeChange = (pageId: string, fulfillsPurpose: string) => {
-    setPages((prev) => prev.map((page) => (page.id === pageId ? { ...page, fulfillsPurpose } : page)))
-  }
+  const handleFulfillsPurposeChange = (
+    pageId: string,
+    fulfillsPurpose: string
+  ) => {
+    setPages((prev) =>
+      prev.map((page) =>
+        page.id === pageId ? { ...page, fulfillsPurpose } : page
+      )
+    );
+  };
 
   const validateAndSave = () => {
     const selectedPages = pages.filter((page) => page.selected);
@@ -99,19 +111,26 @@ export default function PageSelection({
       return false;
     }
 
-    const hasEmptyFulfillsPurpose = selectedPages.some((page) => !page.fulfillsPurpose?.trim())
+    const hasEmptyFulfillsPurpose = selectedPages.some(
+      (page) => !page.fulfillsPurpose?.trim()
+    );
 
     if (hasEmptyFulfillsPurpose) {
-      setError("Por favor responda si cada página seleccionada cumple su propósito")
-      return false
+      setError(
+        "Por favor responda si cada página seleccionada cumple su propósito"
+      );
+      return false;
     }
 
-    const hasEmptyPurpose = selectedPages.some((page) => page.fulfillsPurpose === "no" && !page.purpose?.trim())
-
+    const hasEmptyPurpose = selectedPages.some(
+      (page) => page.fulfillsPurpose === "no" && !page.purpose?.trim()
+    );
 
     if (hasEmptyPurpose) {
-      setError("Por favor complete el propósito para todas las páginas que no cumplen su función")
-      return false
+      setError(
+        "Por favor complete el propósito para todas las páginas que no cumplen su función"
+      );
+      return false;
     }
 
     // Save current report data
@@ -142,16 +161,18 @@ export default function PageSelection({
   return (
     <div className="space-y-6">
       <div className="space-y-2">
+        <h2 className="text-xl font-semibold">{report.name}</h2>
         <h2 className="text-xl font-semibold">
-          {report.name}
+          Estamos en el Informe {reportIndex} de los {totalReports} que
+          seleccionaste.
         </h2>
-        <h2 className="text-xl font-semibold">
-          Estamos en el Informe {reportIndex} de los {totalReports} que seleccionaste.
-        </h2>
-        <p className="text-sm text-muted-foreground">Selecciona las páginas que utilizas de este informe</p>
+        <p className="text-sm text-muted-foreground">
+          Selecciona las páginas que utilizas de este informe
+        </p>
         {selectedPagesCount > 0 && (
           <p className="text-sm text-green-600">
-            {selectedPagesCount} página{selectedPagesCount !== 1 ? "s" : ""} seleccionada
+            {selectedPagesCount} página{selectedPagesCount !== 1 ? "s" : ""}{" "}
+            seleccionada
             {selectedPagesCount !== 1 ? "s" : ""}
           </p>
         )}
@@ -167,7 +188,10 @@ export default function PageSelection({
                   checked={page.selected}
                   onCheckedChange={() => handleTogglePage(page.id)}
                 />
-                <Label htmlFor={`${report.id}-${page.id}`} className="cursor-pointer flex-1">
+                <Label
+                  htmlFor={`${report.id}-${page.id}`}
+                  className="cursor-pointer flex-1"
+                >
                   {page.name}
                 </Label>
               </div>
@@ -175,12 +199,32 @@ export default function PageSelection({
               {page.selected && (
                 <div className="ml-6 space-y-3">
                   <div>
-                    <Label htmlFor={`${report.id}-${page.id}-fulfills`} className="text-sm font-medium">
-                      ¿Cumple su propósito?
-                    </Label>
+                    <div className="flex items-center gap-2">
+                      <Label
+                        htmlFor={`${report.id}-${page.id}-fulfills`}
+                        className="text-sm font-medium"
+                      >
+                        ¿Cumple su propósito?
+                      </Label>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <CircleAlert size={20}/>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            {" "}
+                            ¿La información de la página os sirve así?
+                            o necesitas trabajarla por aparte.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+
                     <Select
                       value={page.fulfillsPurpose}
-                      onValueChange={(value) => handleFulfillsPurposeChange(page.id, value)}
+                      onValueChange={(value) =>
+                        handleFulfillsPurposeChange(page.id, value)
+                      }
                     >
                       <SelectTrigger className="mt-1">
                         <SelectValue placeholder="Selecciona una opción" />
@@ -194,15 +238,26 @@ export default function PageSelection({
 
                   {page.fulfillsPurpose === "no" && (
                     <div>
-                      <Label htmlFor={`${report.id}-${page.id}-purpose`} className="text-sm font-medium">
+                      <Label
+                        htmlFor={`${report.id}-${page.id}-purpose`}
+                        className="text-sm font-medium"
+                      >
                         ¿Para qué utilizas esta página?
                       </Label>
                       <Input
                         id={`${report.id}-${page.id}-purpose`}
-                        placeholder="Describe el propósito o uso de esta página"
+                        placeholder="Describe el propósito o uso que tu le das a esta página"
                         value={page.purpose}
-                        onChange={(e) => handlePurposeChange(page.id, e.target.value)}
-                        className={`mt-1 ${error && page.fulfillsPurpose === "no" && !page.purpose.trim() ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                        onChange={(e) =>
+                          handlePurposeChange(page.id, e.target.value)
+                        }
+                        className={`mt-1 ${
+                          error &&
+                          page.fulfillsPurpose === "no" &&
+                          !page.purpose.trim()
+                            ? "border-red-500 focus-visible:ring-red-500"
+                            : ""
+                        }`}
                       />
                     </div>
                   )}
@@ -216,14 +271,23 @@ export default function PageSelection({
       <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
         <div className="flex gap-3 flex-1">
           {canGoBack && (
-            <Button type="button" variant="outline" onClick={handleBack} className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleBack}
+              className="flex items-center gap-2"
+            >
               <ChevronLeft size={16} />
               Anterior
             </Button>
           )}
 
           {canGoNext && !isLastReport && (
-            <Button type="button" onClick={handleNext} className="flex items-center gap-2">
+            <Button
+              type="button"
+              onClick={handleNext}
+              className="flex items-center gap-2"
+            >
               Siguiente
               <ChevronRight size={16} />
             </Button>
@@ -231,7 +295,10 @@ export default function PageSelection({
         </div>
 
         {isLastReport && (
-          <Button onClick={handleFinish} className="bg-green-600 hover:bg-green-700">
+          <Button
+            onClick={handleFinish}
+            className="bg-green-600 hover:bg-green-700"
+          >
             Finalizar Encuesta
           </Button>
         )}
