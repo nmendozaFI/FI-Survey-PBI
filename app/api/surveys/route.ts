@@ -5,14 +5,14 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    const { name, team, responses } = body
+    const { name, team, extra_need, responses } = body
 
     if (!name || !team || !responses || !Array.isArray(responses)) {
       return NextResponse.json({ error: "Missing required fields: name, team, responses" }, { status: 400 })
     }
 
     console.log("Received survey data:", { name, team, responses })
-    const result = await saveSurveyResult({ name, team, responses })
+    const result = await saveSurveyResult({ name, team,extra_need, responses })
 
     if (result.success) {
       return NextResponse.json({

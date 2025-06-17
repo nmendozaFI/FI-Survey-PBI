@@ -242,7 +242,7 @@ export default function PageSelection({
                         htmlFor={`${report.id}-${page.id}-purpose`}
                         className="text-sm font-medium"
                       >
-                        ¿Para qué utilizas esta página?
+                        ¿Por que¿ - ¿Para qué utilizas esta página? - ¿Qué información te gustaría que tuviera?
                       </Label>
                       <Input
                         id={`${report.id}-${page.id}-purpose`}
@@ -299,7 +299,7 @@ export default function PageSelection({
             onClick={handleFinish}
             className="bg-green-600 hover:bg-green-700"
           >
-            Finalizar Encuesta
+            Continuar
           </Button>
         )}
       </div>

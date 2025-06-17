@@ -71,6 +71,7 @@ export default function SurveySummary({
         body: JSON.stringify({
           name: surveyData.name,
           team: surveyData.team,
+          extra_need: surveyData.extraNeed,
           responses,
         }),
       });
@@ -79,7 +80,9 @@ export default function SurveySummary({
 
       if (response.ok && result.success) {
         setSaveStatus("success");
-        setSaveMessage("Encuesta guardada exitosamente, puedes cerrar esta ventana.");
+        setSaveMessage(
+          "Encuesta guardada exitosamente, puedes cerrar esta ventana."
+        );
         console.log("Survey saved with ID:", result.survey_id);
       } else {
         setSaveStatus("error");
@@ -163,12 +166,12 @@ export default function SurveySummary({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-green-600 mb-2">
-          ¡Encuesta Completada!
+        <h2 className="text-2xl font-bold text-orange-800 mb-2">
+          ¡Encuesta completada!
         </h2>
         <p className="text-muted-foreground">
           Gracias por completar la encuesta. Recuerda{" "}
-          <b className="text-orange-600">Guardar y enviar</b>.
+          <b className="text-green-600 text-2xl">Guardar y enviar</b> antes de cerrar.
         </p>
       </div>
       {/* Estado de guardado */}
@@ -207,8 +210,8 @@ export default function SurveySummary({
         </div>
       )}
 
-      <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-        <h3 className="font-semibold text-green-800 mb-2">
+      <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+        <h3 className="font-semibold text-orange-800 mb-2">
           Resumen de la Encuesta
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
@@ -227,6 +230,18 @@ export default function SurveySummary({
             {flattenedData.length}
           </div>
         </div>
+        {surveyData.extraNeed && (
+          <div className="mt-4 pt-4 border-t border-blue-300">
+            <div>
+              <span className="font-medium text-blue-800">
+                Sugerencia adicional:
+              </span>
+              <p className="mt-1 text-sm text-blue-700 bg-blue-100 p-2 rounded">
+                {surveyData.extraNeed}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="border rounded-md">
@@ -236,7 +251,7 @@ export default function SurveySummary({
               <TableHead>Informe</TableHead>
               <TableHead>Página</TableHead>
               <TableHead>¿Cumple su propósito?</TableHead>
-              <TableHead>¿Para que consultas TU esta página?</TableHead>
+              <TableHead>Proposito alternativo</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -299,7 +314,7 @@ export default function SurveySummary({
 
         <Button
           onClick={saveToDatabase}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white"
           disabled={isDownloading || flattenedData.length === 0}
         >
           <Save size={16} />

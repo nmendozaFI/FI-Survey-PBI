@@ -13,6 +13,7 @@ export type SurveyResult = {
   name: string;
   team: string;
   timestamp: string;
+  extra_need?: string;
   responses: SurveyResponse[];
 };
 
@@ -40,6 +41,7 @@ export type FlattenedSurveyData = {
 export async function saveSurveyResult(surveyData: {
   name: string;
   team: string;
+  extra_need?: string;
   responses: Array<{
     report_name: string;
     page_name: string;
@@ -53,8 +55,8 @@ export async function saveSurveyResult(surveyData: {
 
     // Insertar el resultado de la encuesta
     await sql`
-      INSERT INTO survey_results (survey_id, name, team)
-      VALUES (${survey_id}, ${surveyData.name}, ${surveyData.team})
+      INSERT INTO survey_results (survey_id, name, team, extra_need)
+      VALUES (${survey_id}, ${surveyData.name}, ${surveyData.team}, ${surveyData.extra_need || ""})
     `;
 
     // Insertar todas las respuestas
@@ -95,6 +97,7 @@ export async function getAllSurveyResults(): Promise<SurveyResult[]> {
         sr.name,
         sr.team,
         sr.timestamp,
+        sr.extra_need,
         COALESCE(
           JSON_AGG(
             JSON_BUILD_OBJECT(
@@ -110,7 +113,7 @@ export async function getAllSurveyResults(): Promise<SurveyResult[]> {
         ) as responses
       FROM survey_results sr
       LEFT JOIN survey_responses resp ON sr.survey_id = resp.survey_id
-      GROUP BY sr.id, sr.survey_id, sr.name, sr.team, sr.timestamp
+      GROUP BY sr.id, sr.survey_id, sr.name, sr.team, sr.timestamp, sr.extra_need
       ORDER BY sr.timestamp DESC
     `;
 
@@ -120,6 +123,7 @@ export async function getAllSurveyResults(): Promise<SurveyResult[]> {
       name: row.name,
       team: row.team,
       timestamp: row.timestamp,
+      extra_need: row.extra_need || "",
       responses: Array.isArray(row.responses) ? row.responses : [],
     }));
   } catch (error) {
@@ -225,5 +229,34 @@ export async function getSurveyStats(): Promise<{
       teams: [],
       fulfills_purpose_stats: { si: 0, no: 0 },
     };
+  }
+}
+
+// Obtener solo las sugerencias (extra_need) para exportación separada
+export async function getExtraNeedsData(): Promise<
+  Array<{
+    name: string
+    team: string
+    extra_need: string
+    timestamp: string
+  }>
+> {
+  try {
+    const results = await sql`
+      SELECT name, team, extra_need, timestamp
+      FROM survey_results 
+      WHERE extra_need IS NOT NULL AND extra_need != ''
+      ORDER BY timestamp DESC
+    `
+
+    return results.map((row: any) => ({
+      name: row.name,
+      team: row.team,
+      extra_need: row.extra_need,
+      timestamp: row.timestamp,
+    }))
+  } catch (error) {
+    console.error("Error fetching extra needs data:", error)
+    return []
   }
 }

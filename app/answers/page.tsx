@@ -45,6 +45,7 @@ type SurveyResult = {
   team: string;
   timestamp: string;
   responses: SurveyResponse[];
+  extra_need?: string;
 };
 
 export default function AnswersPage() {
@@ -56,6 +57,7 @@ export default function AnswersPage() {
   const [debugMode, setDebugMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [extraNeedsCount, setExtraNeedsCount] = useState(0);
 
   const fetchSurveys = async () => {
     setIsLoading(true);
@@ -67,7 +69,13 @@ export default function AnswersPage() {
 
       if (response.ok) {
         setSurveyResults(data.surveys || []);
+        // Contar sugerencias
+        const needsCount = (data.surveys || []).filter(
+          (survey: SurveyResult) => survey.extra_need && survey.extra_need.trim() !== "",
+        ).length
+        setExtraNeedsCount(needsCount)
         console.log("Surveys loaded:", data.surveys?.length || 0);
+        console.log("Extra needs count:", needsCount)
       } else {
         setError(data.error || "Error al cargar las encuestas");
       }
@@ -219,6 +227,31 @@ export default function AnswersPage() {
     }, 0);
   };
 
+  const downloadExtraNeeds = async () => {
+    try {
+      const response = await fetch("/api/surveys/extra-needs")
+
+      if (response.ok) {
+        const blob = await response.blob()
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement("a")
+
+        link.setAttribute("href", url)
+        link.setAttribute("download", `sugerencias-informes-${new Date().toISOString().split("T")[0]}.csv`)
+        link.style.visibility = "hidden"
+
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      } else {
+        alert("Error al descargar las sugerencias")
+      }
+    } catch (error) {
+      console.error("Error al descargar sugerencias:", error)
+      alert("Error de conexión al descargar sugerencias")
+    }
+  }
+
   if (isLoading) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-4">
@@ -267,11 +300,21 @@ export default function AnswersPage() {
               onClick={fetchSurveys}
               className="flex items-center gap-2"
             >
-            <RefreshCw size={16} />
+              <RefreshCw size={16} />
               Actualizar
             </Button>
-             {surveyResults.length > 0 && (
-              <Button onClick={downloadAllExcel} disabled={isDownloadingAll} className="flex items-center gap-2">
+            {extraNeedsCount > 0 && (
+              <Button variant="secondary" size="sm" onClick={downloadExtraNeeds} className="flex items-center gap-2">
+                <Download size={16} />
+                Sugerencias ({extraNeedsCount})
+              </Button>
+            )}
+            {surveyResults.length > 0 && (
+              <Button
+                onClick={downloadAllExcel}
+                disabled={isDownloadingAll}
+                className="flex items-center gap-2"
+              >
                 <FileDown size={18} />
                 Descargar Todas ({surveyResults.length}) respuestas
               </Button>
@@ -285,7 +328,9 @@ export default function AnswersPage() {
         {debugMode && (
           <Card className="mb-6 border-yellow-200 bg-yellow-50">
             <CardHeader>
-              <CardTitle className="text-yellow-800">Modo Debug - Información Detallada</CardTitle>
+              <CardTitle className="text-yellow-800">
+                Modo Debug - Información Detallada
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4 text-sm">
@@ -296,9 +341,13 @@ export default function AnswersPage() {
                   <strong>Total respuestas:</strong> {getTotalResponses()}
                 </div>
                 {surveyResults.map((survey, index) => (
-                  <div key={survey.survey_id} className="border-l-2 border-yellow-300 pl-4">
+                  <div
+                    key={survey.survey_id}
+                    className="border-l-2 border-yellow-300 pl-4"
+                  >
                     <div>
-                      <strong>Encuesta {index + 1}:</strong> {survey.name} ({survey.team})
+                      <strong>Encuesta {index + 1}:</strong> {survey.name} (
+                      {survey.team})
                     </div>
                     <div>ID: {survey.survey_id}</div>
                     <div>Timestamp: {survey.timestamp}</div>
@@ -344,14 +393,20 @@ export default function AnswersPage() {
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h3 className="font-semibold">{survey.name}</h3>
-                          <p className="text-sm text-muted-foreground">{survey.team}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {survey.team}
+                          </p>
                           <p className="text-xs text-muted-foreground">
                             {new Date(survey.timestamp).toLocaleString("es-ES")}
                           </p>
                         </div>
                         <div className="flex gap-2">
-                          <Badge variant="secondary">{getTotalReports(survey)} informes</Badge>
-                          <Badge variant="outline">{getTotalPages(survey)} páginas</Badge>
+                          <Badge variant="secondary">
+                            {getTotalReports(survey)} informes
+                          </Badge>
+                          <Badge variant="outline">
+                            {getTotalPages(survey)} páginas
+                          </Badge>
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -359,8 +414,8 @@ export default function AnswersPage() {
                           size="sm"
                           variant="outline"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            setSelectedSurvey(survey)
+                            e.stopPropagation();
+                            setSelectedSurvey(survey);
                           }}
                           className="flex items-center gap-1"
                         >
@@ -370,11 +425,13 @@ export default function AnswersPage() {
                         <Button
                           size="sm"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            downloadExcel(survey)
+                            e.stopPropagation();
+                            downloadExcel(survey);
                           }}
                           className="flex items-center gap-1"
-                          disabled={!survey.responses || survey.responses.length === 0}
+                          disabled={
+                            !survey.responses || survey.responses.length === 0
+                          }
                         >
                           <Download size={14} />
                           Excel
@@ -383,8 +440,8 @@ export default function AnswersPage() {
                           size="sm"
                           variant="destructive"
                           onClick={(e) => {
-                            e.stopPropagation()
-                            deleteSurvey(survey.survey_id)
+                            e.stopPropagation();
+                            deleteSurvey(survey.survey_id);
                           }}
                           className="flex items-center gap-1"
                         >
@@ -413,7 +470,11 @@ export default function AnswersPage() {
           {/* Detalle de encuesta seleccionada */}
           <Card>
             <CardHeader>
-              <CardTitle>{selectedSurvey ? `Detalle: ${selectedSurvey.name}` : "Selecciona una encuesta"}</CardTitle>
+              <CardTitle>
+                {selectedSurvey
+                  ? `Detalle: ${selectedSurvey.name}`
+                  : "Selecciona una encuesta"}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {selectedSurvey ? (
@@ -429,8 +490,18 @@ export default function AnswersPage() {
                     </div>
                     <div className="md:col-span-2">
                       <p className="text-sm font-medium">Fecha</p>
-                      <p className="text-lg">{new Date(selectedSurvey.timestamp).toLocaleDateString("es-ES")}</p>
+                      <p className="text-lg">
+                        {new Date(selectedSurvey.timestamp).toLocaleDateString(
+                          "es-ES"
+                        )}
+                      </p>
                     </div>
+                    {selectedSurvey.extra_need && selectedSurvey.extra_need.trim() !== "" && (
+                      <div className="md:col-span-2 pt-2 border-t">
+                        <p className="text-sm font-medium">Sugerencia adicional</p>
+                        <p className="text-sm bg-blue-50 p-2 rounded mt-1">{selectedSurvey.extra_need}</p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="border rounded-md max-h-96 overflow-y-auto">
@@ -444,10 +515,13 @@ export default function AnswersPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {selectedSurvey.responses && selectedSurvey.responses.length > 0 ? (
+                        {selectedSurvey.responses &&
+                        selectedSurvey.responses.length > 0 ? (
                           selectedSurvey.responses.map((response, index) => (
                             <TableRow key={index}>
-                              <TableCell className="font-medium">{response.report_name}</TableCell>
+                              <TableCell className="font-medium">
+                                {response.report_name}
+                              </TableCell>
                               <TableCell>{response.page_name}</TableCell>
                               <TableCell>
                                 <span
@@ -457,7 +531,9 @@ export default function AnswersPage() {
                                       : "bg-red-100 text-red-800"
                                   }`}
                                 >
-                                  {response.fulfills_purpose === "si" ? "Sí" : "No"}
+                                  {response.fulfills_purpose === "si"
+                                    ? "Sí"
+                                    : "No"}
                                 </span>
                               </TableCell>
                               <TableCell>{response.purpose}</TableCell>
@@ -477,7 +553,10 @@ export default function AnswersPage() {
                   <Button
                     onClick={() => downloadExcel(selectedSurvey)}
                     className="w-full"
-                    disabled={!selectedSurvey.responses || selectedSurvey.responses.length === 0}
+                    disabled={
+                      !selectedSurvey.responses ||
+                      selectedSurvey.responses.length === 0
+                    }
                   >
                     <Download size={16} className="mr-2" />
                     Descargar en Excel

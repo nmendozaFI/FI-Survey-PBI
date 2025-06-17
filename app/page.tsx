@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-
 import reportsData from "./utils/informes-data.json"
 import StepIndicator from "./components/step-indicator"
 import TeamForm from "./components/team-form"
 import ReportSelection from "./components/report-section"
 import PageSelection from "./components/page-section"
+import ExtraNeedForm from "./components/extra-need-form"
 import SurveySummary from "./components/survey-summary"
+
 
 export type Report = {
   id: string
@@ -27,6 +28,7 @@ export type SurveyData = {
   name: string
   team: string
   reports: Report[]
+  extraNeed?: string
 }
 
 const initialReports: Report[] = reportsData
@@ -37,6 +39,7 @@ export default function Home() {
     name: "",
     team: "",
     reports: initialReports,
+    extraNeed: "",
   })
   const [currentReportIndex, setCurrentReportIndex] = useState(0)
 
@@ -61,7 +64,7 @@ export default function Home() {
 
   const handlePageSelection = (
     reportId: string,
-    pages: { id: string; name: string; purpose?: string; selected?: boolean, fulfillsPurpose?: string }[],
+    pages: { id: string; name: string; purpose?: string; selected?: boolean; fulfillsPurpose?: string }[],
   ) => {
     setSurveyData((prev) => ({
       ...prev,
@@ -84,20 +87,12 @@ export default function Home() {
   }
 
   const handleFinishSurvey = () => {
-    // Save survey data to localStorage
-    const surveyResult = {
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
-      name: surveyData.name,
-      team: surveyData.team,
-      reports: surveyData.reports.filter((report) => report.selected),
-    }
+    setCurrentStep(4) // Ir al paso de extraNeed en lugar de directamente al resumen
+  }
 
-    const existingResults = JSON.parse(localStorage.getItem("surveyResults") || "[]")
-    existingResults.push(surveyResult)
-    localStorage.setItem("surveyResults", JSON.stringify(existingResults))
-
-    setCurrentStep(4)
+  const handleExtraNeedSubmit = (extraNeed: string) => {
+    setSurveyData((prev) => ({ ...prev, extraNeed }))
+    setCurrentStep(5) // Cambiar a paso 5 (resumen)
   }
 
   const handleReset = () => {
@@ -105,6 +100,7 @@ export default function Home() {
       name: "",
       team: "",
       reports: initialReports,
+      extraNeed: "",
     })
     setCurrentStep(1)
     setCurrentReportIndex(0)
@@ -113,9 +109,13 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-4 md:p-8">
       <div className="w-full max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8">Encuesta de Uso de Power BI</h1>
+        <h1 className="text-3xl font-bold text-center mb-8">Encuesta de Uso de Informes</h1>
 
-        <StepIndicator currentStep={currentStep} totalSteps={4} labels={["Datos", "Informes", "Páginas", "Resumen"]} />
+        <StepIndicator
+          currentStep={currentStep}
+          totalSteps={5}
+          labels={["Datos", "Informes", "Páginas", "Sugerencias", "Resumen"]}
+        />
 
         <Card className="mt-6">
           <CardContent className="pt-6">
@@ -140,11 +140,18 @@ export default function Home() {
               />
             )}
 
-            {currentStep === 4 && <SurveySummary surveyData={surveyData} onReset={handleReset} />}
+            {currentStep === 4 && (
+              <ExtraNeedForm
+                onSubmit={handleExtraNeedSubmit}
+                onBack={() => setCurrentStep(3)}
+                initialValue={surveyData.extraNeed}
+              />
+            )}
+
+            {currentStep === 5 && <SurveySummary surveyData={surveyData} onReset={handleReset} />}
           </CardContent>
         </Card>
       </div>
     </main>
   )
 }
-
