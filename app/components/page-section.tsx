@@ -63,6 +63,29 @@ export default function PageSelection({
     }))
   );
   const [error, setError] = useState("");
+  const [tempPurpose, setTempPurpose] = useState<{
+    [pageId: string]: { why: string; forWhat: string; info: string };
+  }>({});
+
+  const handleTempPurposeChange = (
+    pageId: string,
+    field: "why" | "forWhat" | "info",
+    value: string
+  ) => {
+    const updated = {
+      ...tempPurpose[pageId],
+      [field]: value,
+    };
+
+    setTempPurpose((prev) => ({
+      ...prev,
+      [pageId]: updated,
+    }));
+
+    // Concatenamos las tres partes en una sola string
+    const combinedPurpose = `${updated.why} | ${updated.forWhat} | ${updated.info}`;
+    handlePurposeChange(pageId, combinedPurpose);
+  };
 
   // Update pages when report changes
   useEffect(() => {
@@ -208,13 +231,13 @@ export default function PageSelection({
                       </Label>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <CircleAlert size={20}/>
+                          <CircleAlert size={20} />
                         </TooltipTrigger>
                         <TooltipContent>
                           <p>
                             {" "}
-                            ¿La información de la página os sirve así?
-                            o necesitas trabajarla por aparte.
+                            ¿La información de la página os sirve así? o
+                            necesitas trabajarla por aparte.
                           </p>
                         </TooltipContent>
                       </Tooltip>
@@ -239,17 +262,73 @@ export default function PageSelection({
                   {page.fulfillsPurpose === "no" && (
                     <div>
                       <Label
-                        htmlFor={`${report.id}-${page.id}-purpose`}
+                        htmlFor={`${report.id}-${page.id}-why`}
                         className="text-sm font-medium"
                       >
-                        ¿Por que¿ - ¿Para qué utilizas esta página? - ¿Qué información te gustaría que tuviera?
+                        ¿Por qué?
                       </Label>
                       <Input
-                        id={`${report.id}-${page.id}-purpose`}
-                        placeholder="Describe el propósito o uso que tu le das a esta página"
-                        value={page.purpose}
+                        id={`${report.id}-${page.id}-why`}
+                        placeholder="Por que tengo que descargar un excel y trabajarlo por aparte, por que es mejor la base..."
+                        value={tempPurpose[page.id]?.why || ""}
                         onChange={(e) =>
-                          handlePurposeChange(page.id, e.target.value)
+                          handleTempPurposeChange(
+                            page.id,
+                            "why",
+                            e.target.value
+                          )
+                        }
+                        className={`mt-1 ${
+                          error &&
+                          page.fulfillsPurpose === "no" &&
+                          !page.purpose.trim()
+                            ? "border-red-500 focus-visible:ring-red-500"
+                            : ""
+                        }`}
+                      />
+
+                      <Label
+                        htmlFor={`${report.id}-${page.id}-forWhat`}
+                        className="text-sm font-medium"
+                      >
+                        ¿Para qué utilizas esta página?
+                      </Label>
+                      <Input
+                        id={`${report.id}-${page.id}-forWhat`}
+                        placeholder="La uso para ver los datos de las socias..."
+                        value={tempPurpose[page.id]?.forWhat || ""}
+                        onChange={(e) =>
+                          handleTempPurposeChange(
+                            page.id,
+                            "forWhat",
+                            e.target.value
+                          )
+                        }
+                        className={`mt-1 ${
+                          error &&
+                          page.fulfillsPurpose === "no" &&
+                          !page.purpose.trim()
+                            ? "border-red-500 focus-visible:ring-red-500"
+                            : ""
+                        }`}
+                      />
+
+                      <Label
+                        htmlFor={`${report.id}-${page.id}-info`}
+                        className="text-sm font-medium"
+                      >
+                        ¿Qué información te gustaría que tuviera?
+                      </Label>
+                      <Input
+                        id={`${report.id}-${page.id}-info`}
+                        placeholder="En la tabla, me gustaria poder ver el movil... "
+                        value={tempPurpose[page.id]?.info || ""}
+                        onChange={(e) =>
+                          handleTempPurposeChange(
+                            page.id,
+                            "info",
+                            e.target.value
+                          )
                         }
                         className={`mt-1 ${
                           error &&

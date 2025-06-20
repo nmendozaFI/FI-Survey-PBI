@@ -325,6 +325,41 @@ export default function SurveySummary({
       <p className="text-muted-foreground">
         Si deseas, puedes descargar los resultados en formato CSV.
       </p>
+      {/* Estado de guardado */}
+      {(isSaving || saveStatus !== "idle") && (
+        <div
+          className={`p-4 border rounded-lg ${
+            saveStatus === "success"
+              ? "bg-green-50 border-green-200"
+              : saveStatus === "error"
+              ? "bg-red-50 border-red-200"
+              : "bg-blue-50 border-blue-200"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {isSaving && (
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+            )}
+            {saveStatus === "success" && (
+              <CheckCircle className="h-4 w-4 text-green-600" />
+            )}
+            {saveStatus === "error" && (
+              <AlertCircle className="h-4 w-4 text-red-600" />
+            )}
+            <span
+              className={`text-sm font-medium ${
+                saveStatus === "success"
+                  ? "text-green-800"
+                  : saveStatus === "error"
+                  ? "text-red-800"
+                  : "text-blue-800"
+              }`}
+            >
+              {isSaving ? "Guardando encuesta..." : saveMessage}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

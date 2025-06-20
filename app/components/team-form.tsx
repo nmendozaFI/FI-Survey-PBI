@@ -6,12 +6,33 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface TeamFormProps {
   onSubmit: (name: string, team: string) => void
   initialName?: string
   initialTeam?: string
 }
+
+const teamOptions = [
+  "Administración",
+  "Alianzas",
+  "Comunicación",
+  "Dirección-Areas",
+  "Dirección-General",
+  "Empleo-Cuidades",
+  "Empleo-Madrid",
+  "ESG",
+  "Formación-IT",
+  "Financiero",
+  "Proyectos",
+]
 
 export default function TeamForm({ onSubmit, initialName = "", initialTeam = "" }: TeamFormProps) {
   const [name, setName] = useState(initialName)
@@ -28,7 +49,7 @@ export default function TeamForm({ onSubmit, initialName = "", initialTeam = "" 
     }
 
     if (!team.trim()) {
-      newErrors.team = "Por favor ingrese el nombre del equipo"
+      newErrors.team = "Por favor selecciona tu equipo"
     }
 
     setErrors(newErrors)
@@ -58,16 +79,24 @@ export default function TeamForm({ onSubmit, initialName = "", initialTeam = "" 
 
         <div className="space-y-2">
           <Label htmlFor="team">¿A qué equipo perteneces?</Label>
-          <Input
-            id="team"
-            placeholder="Ej: Madrid-violencia"
+          <Select
             value={team}
-            onChange={(e) => {
-              setTeam(e.target.value)
+            onValueChange={(value) => {
+              setTeam(value)
               setErrors((prev) => ({ ...prev, team: "" }))
             }}
-            className={errors.team ? "border-red-500" : ""}
-          />
+          >
+            <SelectTrigger className={errors.team ? "border-red-500" : ""}>
+              <SelectValue placeholder="Selecciona tu equipo" />
+            </SelectTrigger>
+            <SelectContent>
+              {teamOptions.map((teamOption) => (
+                <SelectItem key={teamOption} value={teamOption}>
+                  {teamOption}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {errors.team && <p className="text-sm text-red-500">{errors.team}</p>}
         </div>
       </div>
