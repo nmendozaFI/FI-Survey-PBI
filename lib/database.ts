@@ -37,6 +37,18 @@ export type FlattenedSurveyData = {
   purpose: string;
 };
 
+export type CompleteSurveyData = {
+  survey_id: string
+  name: string
+  team: string
+  timestamp: string
+  report_name: string
+  page_name: string
+  fulfills_purpose: "si" | "no" | "NO USADA"
+  purpose: string
+  page_status: "selected" | "not_selected"
+}
+
 // Guardar una nueva encuesta
 export async function saveSurveyResult(surveyData: {
   name: string;
@@ -163,6 +175,41 @@ export async function getFlattenedSurveyData(): Promise<FlattenedSurveyData[]> {
   } catch (error) {
     console.error("Error fetching flattened survey data:", error);
     return [];
+  }
+}
+
+// Obtener datos completos para exportación (incluyendo páginas no seleccionadas)
+export async function getCompleteSurveyData(): Promise<CompleteSurveyData[]> {
+  try {
+    const results = await sql`
+      SELECT 
+        sr.survey_id,
+        sr.name,
+        sr.team,
+        sr.timestamp,
+        resp.report_name,
+        resp.page_name,
+        resp.fulfills_purpose,
+        resp.purpose
+      FROM survey_results sr
+      INNER JOIN survey_responses resp ON sr.survey_id = resp.survey_id
+      ORDER BY sr.timestamp DESC, resp.id
+    `
+
+    return results.map((row: any) => ({
+      survey_id: row.survey_id,
+      name: row.name,
+      team: row.team,
+      timestamp: row.timestamp,
+      report_name: row.report_name,
+      page_name: row.page_name,
+      fulfills_purpose: row.fulfills_purpose,
+      purpose: row.purpose || "",
+      page_status: "selected" as const,
+    }))
+  } catch (error) {
+    console.error("Error fetching complete survey data:", error)
+    return []
   }
 }
 

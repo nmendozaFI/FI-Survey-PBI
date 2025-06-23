@@ -28,6 +28,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import Link from "next/link";
+import { combineWithAllPagesForSingleSurvey } from "@/lib/survey-utils";
 
 type SurveyResponse = {
   id?: number;
@@ -71,11 +72,12 @@ export default function AnswersPage() {
         setSurveyResults(data.surveys || []);
         // Contar sugerencias
         const needsCount = (data.surveys || []).filter(
-          (survey: SurveyResult) => survey.extra_need && survey.extra_need.trim() !== "",
-        ).length
-        setExtraNeedsCount(needsCount)
+          (survey: SurveyResult) =>
+            survey.extra_need && survey.extra_need.trim() !== ""
+        ).length;
+        setExtraNeedsCount(needsCount);
         console.log("Surveys loaded:", data.surveys?.length || 0);
-        console.log("Extra needs count:", needsCount)
+        console.log("Extra needs count:", needsCount);
       } else {
         setError(data.error || "Error al cargar las encuestas");
       }
@@ -90,6 +92,88 @@ export default function AnswersPage() {
   useEffect(() => {
     fetchSurveys();
   }, []);
+
+  const downloadMacroExcel = async (survey: SurveyResult) => {
+    if (!survey.responses || survey.responses.length === 0) {
+      alert("No hay datos para descargar en esta encuesta.");
+      return;
+    }
+    try {
+      // Usar la función utilitaria para obtener TODAS las páginas
+      const completeData = combineWithAllPagesForSingleSurvey(
+        {
+          survey_id: survey.survey_id,
+          name: survey.name,
+          team: survey.team,
+          timestamp: survey.timestamp,
+        },
+        survey.responses.map((response) => ({
+          report_name: response.report_name,
+          page_name: response.page_name,
+          fulfills_purpose: response.fulfills_purpose,
+          purpose: response.purpose,
+        }))
+      );
+
+      const dataForExcel = completeData.map((item) => ({
+        Nombre: item.name,
+        Equipo: item.team,
+        Fecha: new Date(item.timestamp).toLocaleDateString("es-ES"),
+        Informe: item.report_name,
+        Página: item.page_name,
+        "¿Cumple su propósito?":
+          item.fulfills_purpose === "si"
+            ? "Sí"
+            : item.fulfills_purpose === "no"
+            ? "No"
+            : "NO USADA",
+        "Propósito alternativo": item.purpose,
+        Estado:
+          item.page_status === "selected" ? "Seleccionada" : "No seleccionada",
+      }));
+      const headers = [
+        "Nombre",
+        "Equipo",
+        "Fecha",
+        "Informe",
+        "Página",
+        "¿Cumple su propósito?",
+        "Propósito alternativo",
+        "Estado",
+      ];
+      const csvContent = [
+        headers.join(","),
+        ...dataForExcel.map((row) =>
+          headers
+            .map((header) => `"${row[header as keyof typeof row] || ""}"`)
+            .join(",")
+        ),
+      ].join("\n");
+
+      const BOM = "\uFEFF";
+      const blob = new Blob([BOM + csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.setAttribute("href", url);
+      link.setAttribute(
+        "download",
+        `encuesta-completa-${survey.name.replace(/\s+/g, "-")}-${
+          survey.survey_id
+        }.csv`
+      );
+      link.style.visibility = "hidden";
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error al descargar:", error);
+      alert("Error al generar la descarga");
+    }
+  };
 
   const downloadExcel = async (survey: SurveyResult) => {
     if (!survey.responses || survey.responses.length === 0) {
@@ -182,6 +266,35 @@ export default function AnswersPage() {
     }
   };
 
+  const downloadAllMacrosExcel = async () => {
+    setIsDownloadingAll(true);
+
+    try {
+      const response = await fetch("/api/surveys/export-all");
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.setAttribute("href", url)
+        link.setAttribute("download", `todas-las-encuestas-completas-${new Date().toISOString().split("T")[0]}.csv`)
+        link.style.visibility = "hidden"
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        alert("Error al descargar todas las encuestas");
+      }
+    } catch (error) {
+      console.error("Error al descargar todas las encuestas:", error);
+      alert("Error de conexión al descargar");
+    } finally {
+      setIsDownloadingAll(false);
+    }
+  };
+
   const deleteSurvey = async (survey_id: string) => {
     if (!confirm("¿Estás seguro de que quieres eliminar esta encuesta?")) {
       return;
@@ -229,28 +342,31 @@ export default function AnswersPage() {
 
   const downloadExtraNeeds = async () => {
     try {
-      const response = await fetch("/api/surveys/extra-needs")
+      const response = await fetch("/api/surveys/extra-needs");
 
       if (response.ok) {
-        const blob = await response.blob()
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement("a")
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
 
-        link.setAttribute("href", url)
-        link.setAttribute("download", `sugerencias-informes-${new Date().toISOString().split("T")[0]}.csv`)
-        link.style.visibility = "hidden"
+        link.setAttribute("href", url);
+        link.setAttribute(
+          "download",
+          `sugerencias-informes-${new Date().toISOString().split("T")[0]}.csv`
+        );
+        link.style.visibility = "hidden";
 
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       } else {
-        alert("Error al descargar las sugerencias")
+        alert("Error al descargar las sugerencias");
       }
     } catch (error) {
-      console.error("Error al descargar sugerencias:", error)
-      alert("Error de conexión al descargar sugerencias")
+      console.error("Error al descargar sugerencias:", error);
+      alert("Error de conexión al descargar sugerencias");
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -304,7 +420,12 @@ export default function AnswersPage() {
               Actualizar
             </Button>
             {extraNeedsCount > 0 && (
-              <Button variant="secondary" size="sm" onClick={downloadExtraNeeds} className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={downloadExtraNeeds}
+                className="flex items-center gap-2"
+              >
                 <Download size={16} />
                 Sugerencias ({extraNeedsCount})
               </Button>
@@ -317,6 +438,12 @@ export default function AnswersPage() {
               >
                 <FileDown size={18} />
                 Descargar Todas ({surveyResults.length}) respuestas
+              </Button>
+            )}
+            {surveyResults.length > 0 && (
+              <Button onClick={downloadAllMacrosExcel} disabled={isDownloadingAll} className="flex items-center gap-2">
+                <FileDown size={18} />
+                Descargar Macros Completas ({surveyResults.length})
               </Button>
             )}
             <Link href="/">
@@ -496,12 +623,17 @@ export default function AnswersPage() {
                         )}
                       </p>
                     </div>
-                    {selectedSurvey.extra_need && selectedSurvey.extra_need.trim() !== "" && (
-                      <div className="md:col-span-2 pt-2 border-t">
-                        <p className="text-sm font-medium">Sugerencia adicional</p>
-                        <p className="text-sm bg-blue-50 p-2 rounded mt-1">{selectedSurvey.extra_need}</p>
-                      </div>
-                    )}
+                    {selectedSurvey.extra_need &&
+                      selectedSurvey.extra_need.trim() !== "" && (
+                        <div className="md:col-span-2 pt-2 border-t">
+                          <p className="text-sm font-medium">
+                            Sugerencia adicional
+                          </p>
+                          <p className="text-sm bg-blue-50 p-2 rounded mt-1">
+                            {selectedSurvey.extra_need}
+                          </p>
+                        </div>
+                      )}
                   </div>
 
                   <div className="border rounded-md max-h-96 overflow-y-auto">
@@ -549,9 +681,8 @@ export default function AnswersPage() {
                       </TableBody>
                     </Table>
                   </div>
-
                   <Button
-                    onClick={() => downloadExcel(selectedSurvey)}
+                    onClick={() => downloadMacroExcel(selectedSurvey)}
                     className="w-full"
                     disabled={
                       !selectedSurvey.responses ||
@@ -559,7 +690,7 @@ export default function AnswersPage() {
                     }
                   >
                     <Download size={16} className="mr-2" />
-                    Descargar en Excel
+                    Descargar excel Macro
                   </Button>
                 </div>
               ) : (

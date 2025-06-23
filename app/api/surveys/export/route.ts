@@ -1,12 +1,20 @@
-import { NextResponse } from "next/server"
-import { getFlattenedSurveyData } from "@/lib/database"
+import { NextResponse } from "next/server";
+import { getFlattenedSurveyData } from "@/lib/database";
 
 export async function GET() {
   try {
-    const data = await getFlattenedSurveyData()
-
+    const data = await getFlattenedSurveyData();
+    console.log("Exporting all survey data...", data);
     // Convertir a formato CSV
-    const headers = ["Nombre", "Equipo", "Fecha", "Informe", "Página", "¿Cumple su propósito?", "Propósito alternativo"]
+    const headers = [
+      "Nombre",
+      "Equipo",
+      "Fecha",
+      "Informe",
+      "Página",
+      "¿Cumple su propósito?",
+      "Propósito alternativo",
+    ];
 
     const csvContent = [
       headers.join(","),
@@ -19,21 +27,26 @@ export async function GET() {
           `"${row.page_name}"`,
           `"${row.fulfills_purpose === "si" ? "Sí" : "No"}"`,
           `"${row.purpose}"`,
-        ].join(","),
+        ].join(",")
       ),
-    ].join("\n")
+    ].join("\n");
 
     // Agregar BOM para Excel
-    const BOM = "\uFEFF"
+    const BOM = "\uFEFF";
 
     return new NextResponse(BOM + csvContent, {
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": `attachment; filename="todas-las-encuestas-${new Date().toISOString().split("T")[0]}.csv"`,
+        "Content-Disposition": `attachment; filename="todas-las-encuestas-${
+          new Date().toISOString().split("T")[0]
+        }.csv"`,
       },
-    })
+    });
   } catch (error) {
-    console.error("Export Error:", error)
-    return NextResponse.json({ error: "Failed to export data" }, { status: 500 })
+    console.error("Export Error:", error);
+    return NextResponse.json(
+      { error: "Failed to export data" },
+      { status: 500 }
+    );
   }
 }

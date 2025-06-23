@@ -29,7 +29,7 @@ const teamOptions = [
   "Empleo-Cuidades",
   "Empleo-Madrid",
   "ESG",
-  "Formación-IT",
+  "Formación",
   "Financiero",
   "Proyectos",
 ]

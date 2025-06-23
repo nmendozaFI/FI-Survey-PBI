@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/table";
 import type { SurveyData } from "@/app/page";
 import {
-  Download,
   RotateCcw,
   CheckCircle,
   AlertCircle,
@@ -28,7 +27,7 @@ export default function SurveySummary({
   surveyData,
   onReset,
 }: SurveySummaryProps) {
-  const [isDownloading, setIsDownloading] = useState(false);
+  // const [isDownloading, setIsDownloading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">(
     "idle"
@@ -105,75 +104,84 @@ export default function SurveySummary({
   //   }
   // }, []) // Solo se ejecuta una vez
 
-  const downloadCSV = () => {
-    setIsDownloading(true);
+  // const downloadCSV = () => {
+  //   setIsDownloading(true);
 
-    try {
-      const headers = [
-        "Nombre",
-        "Equipo",
-        "Informe",
-        "Página",
-        "¿Cumple su propósito?",
-        "Propósito alternativo",
-      ];
-      const csvContent = [
-        headers.join(","),
-        ...flattenedData.map((row) =>
-          [
-            `"${row.name}"`,
-            `"${row.team}"`,
-            `"${row.reportName}"`,
-            `"${row.pageName}"`,
-            `"${
-              row.fulfillsPurpose === "si"
-                ? "Sí"
-                : row.fulfillsPurpose === "no"
-                ? "No"
-                : ""
-            }"`,
-            `"${row.purpose}"`,
-          ].join(",")
-        ),
-      ].join("\n");
+  //   try {
+  //     const headers = [
+  //       "Nombre",
+  //       "Equipo",
+  //       "Informe",
+  //       "Página",
+  //       "¿Cumple su propósito?",
+  //       "Propósito alternativo",
+  //     ];
+  //     const csvContent = [
+  //       headers.join(","),
+  //       ...flattenedData.map((row) =>
+  //         [
+  //           `"${row.name}"`,
+  //           `"${row.team}"`,
+  //           `"${row.reportName}"`,
+  //           `"${row.pageName}"`,
+  //           `"${
+  //             row.fulfillsPurpose === "si"
+  //               ? "Sí"
+  //               : row.fulfillsPurpose === "no"
+  //               ? "No"
+  //               : ""
+  //           }"`,
+  //           `"${row.purpose}"`,
+  //         ].join(",")
+  //       ),
+  //     ].join("\n");
 
-      const BOM = "\uFEFF";
-      const blob = new Blob([BOM + csvContent], {
-        type: "text/csv;charset=utf-8;",
-      });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
+  //     const BOM = "\uFEFF";
+  //     const blob = new Blob([BOM + csvContent], {
+  //       type: "text/csv;charset=utf-8;",
+  //     });
+  //     const url = URL.createObjectURL(blob);
+  //     const link = document.createElement("a");
 
-      link.setAttribute("href", url);
-      link.setAttribute(
-        "download",
-        `encuesta-${surveyData.name.replace(/\s+/g, "-")}-${
-          new Date().toISOString().split("T")[0]
-        }.csv`
-      );
-      link.style.visibility = "hidden";
+  //     link.setAttribute("href", url);
+  //     link.setAttribute(
+  //       "download",
+  //       `encuesta-${surveyData.name.replace(/\s+/g, "-")}-${
+  //         new Date().toISOString().split("T")[0]
+  //       }.csv`
+  //     );
+  //     link.style.visibility = "hidden";
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("Error al descargar CSV:", error);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //   } catch (error) {
+  //     console.error("Error al descargar CSV:", error);
+  //   } finally {
+  //     setIsDownloading(false);
+  //   }
+  // };
 
   return (
     <div className="space-y-6">
-      <div className="text-center">
+      <div className="text-center  justify-center items-center flex flex-col gap-2">
         <h2 className="text-2xl font-bold text-orange-800 mb-2">
-          ¡Encuesta completada!
+          ¡Revisa tus respuestas!
         </h2>
         <p className="text-muted-foreground">
-          Gracias por completar la encuesta. Recuerda{" "}
+          Para terminar debes hacer click en{" "}
           <b className="text-green-600 text-2xl">Guardar y enviar</b> antes de cerrar.
         </p>
+         <Button
+          onClick={saveToDatabase}
+          className="flex  items-center gap-2 bg-green-500 hover:bg-green-600 text-white"
+          disabled={flattenedData.length === 0}
+        >
+          <Save size={16} />
+          Guardar y Enviar
+        </Button>
       </div>
+     
       {/* Estado de guardado */}
       {(isSaving || saveStatus !== "idle") && (
         <div
@@ -294,14 +302,14 @@ export default function SurveySummary({
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <Button
+        {/* <Button
           onClick={downloadCSV}
           className="flex items-center gap-2"
           disabled={isDownloading || flattenedData.length === 0}
         >
           <Download size={16} />
           Descargar Resultados
-        </Button>
+        </Button> */}
 
         <Button
           variant="outline"
@@ -315,7 +323,7 @@ export default function SurveySummary({
         <Button
           onClick={saveToDatabase}
           className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white"
-          disabled={isDownloading || flattenedData.length === 0}
+          disabled={ flattenedData.length === 0}
         >
           <Save size={16} />
           Guardar y Enviar
